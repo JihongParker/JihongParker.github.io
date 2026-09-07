@@ -427,13 +427,12 @@ function renderTerminal(w) {
     projects: () => out(PROJECTS.map(p => `<span class="y">${esc(p.id.padEnd(7))}</span> ${esc(p.name)}  <span class="g">${esc(p.sub)}</span>`).join("\n")),
     contact: () => out(`mail    <a href="mailto:${PERSON.email}">${PERSON.email}</a>\ngithub  <a href="${PERSON.github}" target="_blank" rel="noopener">${PERSON.github}</a>\nssrn    <a href="${PERSON.ssrn}" target="_blank" rel="noopener">${PERSON.ssrn}</a>`),
     open: (a) => { const p = PROJECTS.find(x => x.id === a); if (p) return launch(p); if (APPS[a]) return open(a); out(`<span class="y">open: ${esc(a || "")}: 없는 이름. help 참고</span>`); },
-    neofetch: () => out(`<span class="d">        ___
-       /   \\      </span><span class="y">${esc(PERSON.name)}</span>@portfolio
-<span class="d">      | o o |     </span>----------------
-<span class="d">       \\_-_/      </span><span class="y">학교</span>    ${esc(PERSON.school)}
-<span class="d">      /|   |\\     </span><span class="y">졸업</span>    ${esc(PERSON.grad)}
-<span class="d">       |___|      </span><span class="y">논문</span>    6편 (SSRN)
-                  <span class="y">웹앱</span>    HongERP · 헤지 관측소 · 퀀트 랩
+    neofetch: () => out(`<span class="d">     ██╗██████╗ </span>  <span class="y">${esc(PERSON.name)}</span>@portfolio
+<span class="d">     ██║██╔══██╗</span>  ----------------
+<span class="d">     ██║██████╔╝</span>  <span class="y">학교</span>    ${esc(PERSON.school)}
+<span class="d">██   ██║██╔═══╝ </span>  <span class="y">졸업</span>    ${esc(PERSON.grad)}
+<span class="d">╚█████╔╝██║     </span>  <span class="y">논문</span>    6편 (SSRN)
+<span class="d"> ╚════╝ ╚═╝     </span>  <span class="y">웹앱</span>    HongERP · 헤지 관측소 · 퀀트 랩
                   <span class="y">데스크</span>  페이퍼 모드
                   <span class="y">도구</span>    ${PERSON.tools.map(esc).join(" · ")}`),
     clear: () => { for (const c of [...t.children]) if (c !== line) c.remove(); },
