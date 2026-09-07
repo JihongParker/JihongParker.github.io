@@ -465,7 +465,7 @@ setTimeout(() => {
   const p = PROJECTS.find(x => x.id === hash);
   if (p) launch(p);
   else if (hash && APPS[hash]) open(hash);
-  else { open("finder"); if (!isMobile()) setTimeout(() => { const a = open("about"); a.el.style.left = "auto"; a.el.style.right = "120px"; a.el.style.top = "60px"; }, 350); }
+  else open("about");
 }, seen ? 250 : 1350);
 window.addEventListener("resize", () => { for (const w of wins.values()) if (w.el.classList.contains("max")) { Object.assign(w.el.style, { width: innerWidth + "px", height: (innerHeight - 28 - 84) + "px" }); w.el.dispatchEvent(new Event("winresize")); } });
 })();
