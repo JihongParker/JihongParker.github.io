@@ -71,7 +71,7 @@ a{color:var(--accent);text-decoration:none}
 .dicon{width:84px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:8px;cursor:default;user-select:none;text-align:center}
 .dicon .ic{width:56px;height:56px;display:grid;place-items:center;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
 .dicon .ic svg{width:56px;height:56px}
-.dicon span{font-size:12px;line-height:1.2;color:var(--icon-label);text-shadow:0 1px 3px rgba(0,0,0,.7);padding:1px 4px;border-radius:4px}
+.dicon span{font-size:12px;line-height:1.2;word-break:keep-all;color:var(--icon-label);text-shadow:0 1px 3px rgba(0,0,0,.7);padding:1px 4px;border-radius:4px}
 .dicon:hover{background:rgba(255,255,255,.12)}
 .dicon.sel span{background:var(--accent);text-shadow:none}
 .dicon.sel .ic{background:rgba(255,255,255,.2);border-radius:8px}
