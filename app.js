@@ -302,10 +302,10 @@ function renderDesk(w) {
       <h2>구조</h2><p class="flow">전략 → 신호 → 조정자 → 리스크 게이트 → 브로커 → 장부</p><p class="muted">전략은 주문을 직접 내지 않습니다. 모든 주문은 게이트를 지나고 장부에 남습니다. 데스크와 화면은 터미널 없이 상주하고, 재시작하면 장부에서 상태를 되살립니다.</p>
       <div class="two"><div><h2>전략 4종</h2><ul>${DESK.strategies.map(s => `<li><b>${esc(s[0])}</b> ${esc(s[1])}</li>`).join("")}</ul></div>
       <div><h2>층</h2><ul><li><b>시세</b> 5분 봉, 일봉, 장기 데이터</li><li><b>재무 감사</b> 저평가·우량·성장·모멘텀 점수, 부채 흐름</li><li><b>뉴스</b> 언어모델 판독, 검증 중 가설로 강등</li><li><b>장부</b> SQLite, 모든 주문과 거부 사유 기록</li></ul></div></div>
-      <h2>결론</h2><p>모멘텀과 저변동을 섞은 첫 챔피언은 비용을 넣자 동일가중 매수보유를 못 이겼고, 표본외 우위는 장세 운이었습니다. 알파는 드물고, 남는 엣지는 낙폭 관리입니다.</p></div></div>
+      <h2>결론</h2><p>모멘텀과 저변동을 섞은 첫 전략은 비용을 반영하면 동일가중 매수보유에 미치지 못했고, 표본외 우위도 특정 장세에 의존한 결과였습니다. 이후 설계는 낙폭 관리를 우선합니다.</p></div></div>
     <div class="td-view" data-view="valid" hidden><div class="pane desk">
       <div class="stats">${DESK.tests.map(s => `<div class="stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("")}</div>
-      <h2>남은 엣지 하나: 변동성 목표로 낙폭 줄이기</h2>
+      <h2>변동성 목표에 따른 낙폭 비교</h2>
       <div class="ctl"><label>목표 변동성 <output data-o="tv">10%</output><input type="range" data-tv min="5" max="20" value="10"></label><label>실현변동성 창 <output data-o="lb">12주</output><input type="range" data-lb min="4" max="26" value="12"></label><span class="muted">SPY 주간 종가 1993년부터. 레버리지 상한 1, 비용 0.</span></div>
       <div class="chart"><canvas></canvas><div class="tip" hidden></div><div class="legend"><span><i style="background:var(--s1)"></i>매수 후 보유</span><span><i style="background:var(--s2)"></i>변동성 목표</span></div></div>
       <table class="tbl2"><thead><tr><th>구간</th><th>매수 후 보유 최대낙폭</th><th>변동성 목표 최대낙폭</th><th>차이</th></tr></thead><tbody data-crisis></tbody></table></div></div>
