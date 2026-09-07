@@ -49,6 +49,7 @@ const APPS = {
   mail:     { title: "연락",      icon: ICONS.mail,     w: 560,  h: 360, render: renderMail },
   about:    { title: "이 사람에 관하여", icon: ICONS.settings, w: 600, h: 380, render: renderAbout },
   desk:     { title: "트레이딩 데스크", icon: ICONS.desk, w: 1360, h: 800, render: renderDesk },
+  timeline: { title: "경력", icon: ICONS.timeline, w: 900, h: 720, render: renderTimeline },
 };
 /* 위젯 → 바로 열기 */
 const launch = (p) => p.live ? open("safari", p.id) : open(p.app);
@@ -134,9 +135,9 @@ function closeAll() { for (const w of [...wins.values()]) close(w); }
 /* ---------- dock ---------- */
 const dock = $("#dock");
 const dockItem = (app, icon, title, run) => { const d = el(`<div class="dk" data-app="${app}">${icon}<span class="tip">${esc(title)}</span></div>`); d.onclick = run; dock.appendChild(d); };
-for (const id of ["finder", "notes", "preview", "safari", "terminal", "mail", "about"]) dockItem(id, APPS[id].icon, APPS[id].title, () => open(id));
+for (const id of ["finder", "notes", "preview", "safari", "terminal", "mail", "timeline", "about"]) dockItem(id, APPS[id].icon, APPS[id].title, () => open(id));
 dock.appendChild(el('<div class="sep"></div>'));
-for (const p of PROJECTS.filter(p => p.id !== "papers")) dockItem(projectApp(p) + "#" + p.id, ICONS[p.icon], p.name, () => launch(p));
+for (const p of PROJECTS.filter(p => p.id !== "papers" && p.id !== "desk")) dockItem(projectApp(p) + "#" + p.id, ICONS[p.icon], p.name, () => launch(p));
 dock.appendChild(el('<div class="sep"></div>'));
 dockItem("trash", ICONS.trash, "휴지통 (열린 창 모두 닫기)", closeAll);
 function updateDock() { for (const d of dock.querySelectorAll(".dk")) { const a = d.dataset.app.split("#")[0]; d.classList.toggle("run", [...wins.values()].some(o => o.appId === a)); } }
@@ -150,9 +151,11 @@ dock.addEventListener("pointerleave", () => { for (const d of dock.querySelector
 /* ---------- desktop icons ---------- */
 const iconsBox = $("#icons");
 const DESK_ITEMS = [
-  ...PROJECTS.map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
+  ...PROJECTS.filter(p => p.id !== "desk").map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
+  { label: "경력", icon: ICONS.timeline, run: () => open("timeline") },
   { label: "메모.txt", icon: ICONS.doc("TXT"), run: () => open("notes") },
   { label: "GitHub", icon: ICONS.github, run: () => ext(PERSON.github) },
+  ...PROJECTS.filter(p => p.id === "desk").map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
 ];
 for (const it of DESK_ITEMS) {
   const d = el(`<div class="dicon" tabindex="0"><div class="ic">${it.icon}</div><span>${esc(it.label)}</span></div>`);
@@ -220,6 +223,7 @@ function renderFinder(w) {
   const groups = {
     "포트폴리오": PROJECTS.map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
     "논문": PAPERS.map(p => ({ label: `${p.n}_${p.kr}.pdf`, icon: ICONS.pdf, run: () => open("preview", p.n) })),
+    "경력": [{ label: "경력.md", icon: ICONS.timeline, run: () => open("timeline") }],
     "메모": NOTES.map((n, i) => ({ label: n.t + ".txt", icon: ICONS.doc("TXT"), run: () => open("notes", i) })),
     "연락": [{ label: "메일", icon: ICONS.mail, run: () => open("mail") }, { label: "GitHub", icon: ICONS.github, run: () => ext(PERSON.github) }],
   };
@@ -286,7 +290,7 @@ function renderDesk(w) {
   body.innerHTML = `<div class="td">
     <div class="td-top">
       <div class="td-logo"><i></i>trading-desk</div>
-      <div class="td-tabs"><button class="on" data-v="desk">데스크</button><button data-v="struct">구조</button><button data-v="valid">검증</button></div>
+      <div class="td-tabs"><button class="on" data-v="desk">데스크</button><button data-v="struct">구조</button></div>
       <div class="td-search"><input placeholder="종목 검색 ( / )" data-q></div>
       <div class="td-grid"><button data-g="1">1</button><button class="on" data-g="4">4</button></div>
       <div class="td-kv"><span>평가자산 <b>비공개</b></span><span>누적손익 <b>비공개</b></span><span>주문가능 <b>비공개</b></span></div>
@@ -301,19 +305,12 @@ function renderDesk(w) {
     <div class="td-view" data-view="struct" hidden><div class="pane">
       <h2>구조</h2><p class="flow">전략 → 신호 → 조정자 → 리스크 게이트 → 브로커 → 장부</p><p class="muted">전략은 주문을 직접 내지 않습니다. 모든 주문은 게이트를 지나고 장부에 남습니다. 데스크와 화면은 터미널 없이 상주하고, 재시작하면 장부에서 상태를 되살립니다.</p>
       <div class="two"><div><h2>전략 4종</h2><ul>${DESK.strategies.map(s => `<li><b>${esc(s[0])}</b> ${esc(s[1])}</li>`).join("")}</ul></div>
-      <div><h2>층</h2><ul><li><b>시세</b> 5분 봉, 일봉, 장기 데이터</li><li><b>재무 감사</b> 저평가·우량·성장·모멘텀 점수, 부채 흐름</li><li><b>뉴스</b> 언어모델 판독, 검증 중 가설로 강등</li><li><b>장부</b> SQLite, 모든 주문과 거부 사유 기록</li></ul></div></div>
-      <h2>결론</h2><p>모멘텀과 저변동을 섞은 첫 전략은 비용을 반영하면 동일가중 매수보유에 미치지 못했고, 표본외 우위도 특정 장세에 의존한 결과였습니다. 이후 설계는 낙폭 관리를 우선합니다.</p></div></div>
-    <div class="td-view" data-view="valid" hidden><div class="pane desk">
-      <div class="stats">${DESK.tests.map(s => `<div class="stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("")}</div>
-      <h2>변동성 목표에 따른 낙폭 비교</h2>
-      <div class="ctl"><label>목표 변동성 <output data-o="tv">10%</output><input type="range" data-tv min="5" max="20" value="10"></label><label>실현변동성 창 <output data-o="lb">12주</output><input type="range" data-lb min="4" max="26" value="12"></label><span class="muted">SPY 주간 종가 1993년부터. 레버리지 상한 1, 비용 0.</span></div>
-      <div class="chart"><canvas></canvas><div class="tip" hidden></div><div class="legend"><span><i style="background:var(--s1)"></i>매수 후 보유</span><span><i style="background:var(--s2)"></i>변동성 목표</span></div></div>
-      <table class="tbl2"><thead><tr><th>구간</th><th>매수 후 보유 최대낙폭</th><th>변동성 목표 최대낙폭</th><th>차이</th></tr></thead><tbody data-crisis></tbody></table></div></div>
+      <div><h2>층</h2><ul><li><b>시세</b> 5분 봉, 일봉, 장기 데이터</li><li><b>재무 감사</b> 저평가·우량·성장·모멘텀 점수, 부채 흐름</li><li><b>뉴스</b> 언어모델 판독, 실험 중</li><li><b>장부</b> SQLite, 모든 주문과 거부 사유 기록</li></ul></div></div></div></div>
     <div class="td-ticker"><div class="td-tk"></div></div>
   </div>`;
   /* 탭 */
   const views = body.querySelectorAll(".td-view");
-  for (const b of body.querySelectorAll(".td-tabs button")) b.onclick = () => { for (const o of body.querySelectorAll(".td-tabs button")) o.classList.toggle("on", o === b); for (const v of views) v.hidden = v.dataset.view !== b.dataset.v; if (b.dataset.v === "valid") validation.draw(); else drawAll(); };
+  for (const b of body.querySelectorAll(".td-tabs button")) b.onclick = () => { for (const o of body.querySelectorAll(".td-tabs button")) o.classList.toggle("on", o === b); for (const v of views) v.hidden = v.dataset.view !== b.dataset.v; drawAll(); };
   /* 추천 종목 */
   fetch("desk_recs.json").then(r => r.json()).then(recs => {
     $(".td-recs", body).innerHTML = recs.map((r, i) => `<div class="rec"><div class="rec-h"><span class="rk">${i + 1}</span><b>${esc(r.symbol)}</b><span class="nm">${esc(DESK_NAMES[r.symbol] || "")} · ${esc(r.sector || "")}</span><span class="sc">+${(+r.composite).toFixed(2)}</span></div><div class="rec-s">${esc(r.summary || "")}</div><div class="rec-t">${r.deleveraging ? '<span class="tg r">채권환원</span>' : ""}${r.net_cash ? '<span class="tg g">순현금</span>' : ""}</div></div>`).join("");
@@ -373,44 +370,14 @@ function renderDesk(w) {
   fetch("desk_candles.json").then(r => r.json()).then(j => { CANDLES = j.symbols; buildCards(); renderSignals(); }).catch(() => { charts.innerHTML = '<p class="muted" style="padding:20px">시세 파일을 읽지 못했습니다.</p>'; });
   for (const b of body.querySelectorAll("[data-g]")) b.onclick = () => { grid = +b.dataset.g; for (const o of body.querySelectorAll("[data-g]")) o.classList.toggle("on", o === b); buildCards(); };
   $("[data-q]", body).oninput = (e) => { filter = e.target.value.trim().toUpperCase(); buildCards(); };
-  /* 검증 탭(변동성 목표) */
-  const validation = renderValidation($('[data-view="valid"]', body), w);
-  w.el.addEventListener("winresize", () => { drawAll(); validation.draw(); }); new ResizeObserver(() => drawAll()).observe(charts);
+  w.el.addEventListener("winresize", drawAll); new ResizeObserver(() => drawAll()).observe(charts);
 }
-function renderValidation(host, w) {
-  const cv = $("canvas", host), tip = $(".tip", host), chart = $(".chart", host);
-  let rows = null, series = null;
-  fetch("spy_weekly.json").then(r => r.json()).then(j => { rows = j.rows; compute(); draw(); }).catch(() => {});
-  function compute() {
-    const tv = +$("[data-tv]", host).value / 100, lb = +$("[data-lb]", host).value;
-    const px = rows.map(r => r[1]), n = px.length, bh = [1], vt = [1], wts = [1], rets = [0];
-    for (let i = 1; i < n; i++) rets.push(px[i] / px[i - 1] - 1);
-    for (let i = 1; i < n; i++) { let wgt = 1; if (i > lb) { const s = rets.slice(i - lb, i); const m = s.reduce((a, b) => a + b, 0) / lb; const v = Math.sqrt(s.reduce((a, b) => a + (b - m) ** 2, 0) / (lb - 1)) * Math.sqrt(52); wgt = Math.min(1, tv / Math.max(v, 1e-6)); } bh.push(bh[i - 1] * (1 + rets[i])); vt.push(vt[i - 1] * (1 + wgt * rets[i])); wts.push(wgt); }
-    series = { bh, vt, wts };
-    const mdd = (arr, a, b) => { let pk = arr[a], m = 0; for (let i = a; i <= b; i++) { pk = Math.max(pk, arr[i]); m = Math.min(m, arr[i] / pk - 1); } return m; };
-    const idx = (d) => { let k = 0; while (k < n - 1 && rows[k][0] < d) k++; return k; };
-    const pct = (x) => (x * 100).toFixed(1) + "%";
-    $("[data-crisis]", host).innerHTML = DESK.crises.map(c => { const a = idx(c[1]), b = idx(c[2]); const x = mdd(bh, a, b), y = mdd(vt, a, b); return `<tr><td>${esc(c[0])} <span class="muted">${c[1].slice(0, 4)}~${c[2].slice(0, 4)}</span></td><td>${pct(x)}</td><td>${pct(y)}</td><td>${(y - x) >= 0 ? "+" : ""}${pct(y - x)}</td></tr>`; }).join("") + `<tr><td>전체 ${rows[0][0].slice(0, 4)}~${rows[n - 1][0].slice(0, 4)}</td><td>${pct(mdd(bh, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1) - mdd(bh, 0, n - 1))}</td></tr>`;
-  }
-  function draw() {
-    if (!series || host.hidden) return;
-    const dpr = devicePixelRatio || 1, W = chart.clientWidth, H = 280; if (W < 10) return;
-    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
-    const c = cv.getContext("2d"); c.scale(dpr, dpr);
-    const st = getComputedStyle(host), s1 = st.getPropertyValue("--s1").trim(), s2 = st.getPropertyValue("--s2").trim(), ink = "#7d8590", grid = "rgba(255,255,255,.08)";
-    const L = 44, R = 70, T = 12, B = 26, n = rows.length;
-    const ymax = Math.max(...series.bh, ...series.vt), lmax = Math.log10(ymax * 1.15);
-    const X = (i) => L + (W - L - R) * i / (n - 1), Y = (v) => T + (H - T - B) * (1 - Math.log10(v) / lmax);
-    c.clearRect(0, 0, W, H); c.font = "11px " + st.fontFamily; c.fillStyle = ink; c.strokeStyle = grid; c.lineWidth = 1;
-    for (const t of [1, 2, 5, 10, 20, 50]) { if (t > ymax * 1.15) break; c.beginPath(); c.moveTo(L, Y(t)); c.lineTo(W - R, Y(t)); c.stroke(); c.textAlign = "right"; c.fillText(t + "배", L - 6, Y(t) + 4); }
-    c.textAlign = "center"; for (let y = 1995; y <= 2030; y += 5) { const k = rows.findIndex(r => r[0] >= y + "-01-01"); if (k > 0) c.fillText(String(y), X(k), H - 8); }
-    const line = (arr, col) => { c.beginPath(); c.strokeStyle = col; c.lineWidth = 2; c.lineJoin = "round"; arr.forEach((v, i) => i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v))); c.stroke(); c.textAlign = "left"; c.fillStyle = "#e6edf3"; c.fillText(arr[n - 1].toFixed(1) + "배", W - R + 6, Y(arr[n - 1]) + 4); };
-    line(series.bh, s1); line(series.vt, s2);
-    chart.onpointermove = (e) => { const r = cv.getBoundingClientRect(), i = Math.round((e.clientX - r.left - L) / (W - L - R) * (n - 1)); if (i < 0 || i >= n) { tip.hidden = true; return; } tip.hidden = false; tip.style.left = Math.min(X(i) + 12, W - 190) + "px"; tip.style.top = "8px"; tip.innerHTML = `<b>${rows[i][0]}</b><div><i style="background:${s1}"></i>매수 후 보유 ${series.bh[i].toFixed(2)}배</div><div><i style="background:${s2}"></i>변동성 목표 ${series.vt[i].toFixed(2)}배 <span class="muted">비중 ${(series.wts[i] * 100).toFixed(0)}%</span></div>`; draw(); c.strokeStyle = ink; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(X(i), T); c.lineTo(X(i), H - B); c.stroke(); c.setLineDash([]); for (const [arr, col] of [[series.bh, s1], [series.vt, s2]]) { c.beginPath(); c.arc(X(i), Y(arr[i]), 4, 0, 7); c.fillStyle = col; c.fill(); c.strokeStyle = "#1a1d24"; c.lineWidth = 2; c.stroke(); } };
-    chart.onpointerleave = () => { tip.hidden = true; draw(); };
-  }
-  for (const inp of host.querySelectorAll("input[type=range]")) inp.oninput = () => { $("[data-o=tv]", host).textContent = $("[data-tv]", host).value + "%"; $("[data-o=lb]", host).textContent = $("[data-lb]", host).value + "주"; if (rows) { compute(); draw(); } };
-  return { draw };
+/* ---------- 경력 타임라인 ---------- */
+function renderTimeline(w) {
+  const body = $(".body", w.el);
+  body.innerHTML = `<div class="pane tline"><div class="crumb">~/portfolio/timeline/</div><h1>경력</h1><p class="muted">시간순 주요 경력 및 프로젝트</p>
+    <div class="tl-list">${TIMELINE.map(e => `<div class="tl-e"><i></i><div class="tl-d">${esc(e.from)}${e.to ? " — " + esc(e.to) : ""}</div><div class="tl-o">${esc(e.org)}</div>
+      ${e.items.map(it => `<div class="tl-c"><div class="tl-ch"><b>${esc(it.t)}</b></div>${it.b.length ? `<ul>${it.b.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div>`).join("")}</div>`).join("")}</div></div>`;
 }
 
 /* ---------- 터미널 ---------- */

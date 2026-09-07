@@ -15,6 +15,7 @@ window.ICONS = {
   desk: `<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="13" fill="#1f2937"/><g stroke-width="3" stroke-linecap="round"><path d="M14 40l10-12 8 8 8-16 10 6" fill="none" stroke="#34d399"/></g><rect x="14" y="46" width="36" height="4" rx="2" fill="#4b5563"/><circle cx="50" cy="26" r="3" fill="#f87171"/></svg>`,
   pdf: `<svg viewBox="0 0 64 64"><path d="M14 4h26l12 12v42a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="#fff" stroke="#c8c8cc"/><path d="M40 4v12h12" fill="#e6e6ea"/><rect x="10" y="34" width="34" height="16" rx="3" fill="#e0342b"/><text x="27" y="46" font-size="10" text-anchor="middle" fill="#fff" font-family="-apple-system,sans-serif" font-weight="700">PDF</text></svg>`,
   preview: `<svg viewBox="0 0 64 64"><defs><linearGradient id="pv" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5ed3ff"/><stop offset="1" stop-color="#1b8ee0"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="13" fill="url(#pv)"/><rect x="14" y="14" width="36" height="36" rx="4" fill="#fff"/><path d="M14 40l10-10 8 8 6-6 12 12v6H14z" fill="#8fd3ff"/><circle cx="40" cy="24" r="4" fill="#ffd60a"/></svg>`,
+  timeline: `<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="13" fill="#fff"/><rect x="4" y="4" width="56" height="18" rx="13" fill="#ff3b30"/><rect x="4" y="14" width="56" height="8" fill="#ff3b30"/><text x="32" y="50" font-size="26" text-anchor="middle" fill="#1d1d1f" font-family="-apple-system,sans-serif" font-weight="700">경력</text></svg>`,
   github: `<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="13" fill="#24292f"/><path d="M32 14a18 18 0 0 0-5.7 35.1c.9.2 1.2-.4 1.2-.9v-3.1c-5 1.1-6.1-2.1-6.1-2.1-.8-2.1-2-2.6-2-2.6-1.6-1.1.1-1.1.1-1.1 1.8.1 2.8 1.9 2.8 1.9 1.6 2.8 4.3 2 5.3 1.5.2-1.2.6-2 1.2-2.4-4-.5-8.2-2-8.2-8.9 0-2 .7-3.6 1.9-4.8-.2-.5-.8-2.3.2-4.8 0 0 1.5-.5 5 1.8a17 17 0 0 1 9 0c3.4-2.3 5-1.8 5-1.8 1 2.5.4 4.3.2 4.8 1.2 1.2 1.9 2.8 1.9 4.8 0 6.9-4.2 8.4-8.2 8.9.6.6 1.2 1.7 1.2 3.4v5c0 .5.3 1.1 1.2.9A18 18 0 0 0 32 14z" fill="#fff"/></svg>`,
 };
 
@@ -57,7 +58,7 @@ window.PROJECTS = [
   },
   {
     id: "desk", name: "트레이딩 데스크", sub: "페이퍼 모드", icon: "desk", kind: "시스템", app: "desk",
-    one: "미국 주식 자동 데스크입니다. 전략 16개를 다중검정한 결과 알파가 확인되지 않아, 이후 설계는 낙폭 관리 중심으로 바꿨습니다.",
+    one: "개인용 미국 주식 자동 데스크입니다. 전략은 주문을 직접 내지 않고, 모든 주문이 리스크 게이트를 지나 장부에 남습니다.",
     look: [],
     links: [],
   },
@@ -75,7 +76,6 @@ window.PAPERS = [
 window.NOTES = [
   { t: "일하는 방식", d: "무엇을 직접 하나", b: `<h1>일하는 방식</h1>
 <p>설계와 기준은 제가 정하고, 반복 작업은 언어모델 파이프라인에 맡깁니다. 각주 문장을 모델이 읽고 분류하게 하는 방식, 분류 기준, 표본 대조는 제가 했고 수천 건 처리는 파이프라인이 했습니다.</p>
-<p>트레이딩 데스크의 첫 결론(모멘텀과 저변동 혼합에 알파가 있다)은 비용을 넣어 다시 검증하면서 철회했습니다. 이후 설계 원칙은 낙폭 관리 우선입니다.</p>
 <div class="note">모든 사이트는 정적 배포입니다. 계산은 미리 하고 화면은 읽기만 합니다.</div>
 <h2>쓰는 도구</h2><div class="chips" data-tools></div>` },
   { t: "가고 싶은 곳", d: "세 경로", b: `<h1>가고 싶은 곳</h1>
@@ -85,10 +85,8 @@ window.NOTES = [
 
 /* 트레이딩 데스크 (페이퍼 모드, 실계좌 수치 없음) */
 window.DESK = {
-  strategies: [["SmaCross", "이동평균 교차, 기준선"], ["RSI(2)", "평균회귀"], ["TSMOM", "시계열 모멘텀, 변동성 역가중"], ["News", "뉴스 언어모델 신호, 검증 중 가설"]],
+  strategies: [["SmaCross", "이동평균 교차, 기준선"], ["RSI(2)", "평균회귀"], ["TSMOM", "시계열 모멘텀, 변동성 역가중"], ["News", "뉴스 언어모델 신호, 실험 중"]],
   gates: [["주문 한 건", "자본의 20% 이하"], ["종목 하나", "자본의 32% 이하"], ["하루 손실", "자본의 2%에서 서킷 발동"], ["거래", "전면 꺼짐, 페이퍼만"]],
-  tests: [["16", "검정한 전략"], ["0.07", "다중검정 보정 샤프"], ["5%", "과적합 확률"], ["1.09 < 1.49", "최고 샤프 대 운으로 기대되는 최고치"]],
-  crises: [["닷컴 붕괴", "2000-03-24", "2002-10-09"], ["금융위기", "2007-10-09", "2009-03-09"], ["코로나", "2020-02-19", "2020-03-23"], ["금리 인상", "2022-01-03", "2022-10-12"]],
 };
 
 window.TERMINAL_HELP = `쓸 수 있는 명령
@@ -101,3 +99,17 @@ window.TERMINAL_HELP = `쓸 수 있는 명령
   open <이름>     열기 (erp, obs, quant, desk, papers, notes, mail)
   neofetch        요약 카드
   clear           지우기`;
+
+/* 경력 타임라인 (최신순) */
+window.TIMELINE = [
+  { from: "2026.09", to: "진행 중", org: "헤지 관측소", items: [{ t: "코스피 상장사 파생상품 각주 전수 파싱 패널", b: ["수집, 판별, 정규화, 공개 4단계 배치 파이프라인 설계", "정적 패널 사이트 v0 배포 (React, TypeScript)", "OpenDART 수집 코드와 각주 파서를 논문 파이프라인에서 이식"] }] },
+  { from: "2026.08", to: "", org: "퀀트 랩", items: [{ t: "계량 모형 44종 인터랙티브 사이트", b: ["시트 발췌 106개와 동적 엔진 44종을 한 화면에 구성", "외부 라이브러리 없이 캔버스 차트와 WebGL 히어로 구현"] }] },
+  { from: "2026.07", to: "2026.08", org: "HongERP", items: [{ t: "ESG 의사결정층 ERP 시제품", b: ["논문 4편의 엔진을 동결해 연산 코어로 사용", "역할별 권한, 결재 대기열, 감사 추적, 회계연도 마감, CI 수치 검증", "4대 회계법인 ESG 솔루션 벤치마크 후 결정 층 설계", "GitHub Pages 배포 (React 19, TypeScript, Vite)"] }] },
+  { from: "2026.07", to: "", org: "트레이딩 데스크 (개인)", items: [{ t: "미국 주식 자동 데스크", b: ["전략, 신호, 조정자, 리스크 게이트, 브로커, 장부 구조 설계", "Python, SQLite, launchd 상주, 페이퍼 모드 운용"] }] },
+  { from: "2026", to: "2026.08", org: "WTI·원달러 헤지 연구 프로그램", items: [{ t: "작업 논문 6편 (SSRN, ResearchGate)", b: ["고정 예산 배분, 콴토 낙아웃 델타헤지, IFRS 9 지정 구조, ESG 공시 효과, KIKO 노트 2편", "코스피 380사 2016~2024 OpenDART 패널 구축과 회귀 분석", "Python 엔진과 Excel VBA 감사, LaTeX 원고"] }] },
+  { from: "2025.09", to: "2025.12", org: "캠코 함께그리는미래 멘토링", items: [{ t: "복지시설 아동 영어 지도", b: [] }] },
+  { from: "2025.03", to: "현재", org: "UK어학원", items: [{ t: "영어 강사", b: [] }] },
+  { from: "2024.04", to: "2025.03", org: "한스어학원", items: [{ t: "영어 강사", b: [] }] },
+  { from: "2022.10", to: "2024.04", org: "육군", items: [{ t: "병장 만기전역", b: [] }] },
+  { from: "2021.03", to: "", org: "부산대학교 경영학과", items: [{ t: "입학, 2027년 8월 졸업 예정", b: [] }] },
+];
