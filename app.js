@@ -376,7 +376,7 @@ function renderDesk(w) {
 function renderTimeline(w) {
   const body = $(".body", w.el);
   body.innerHTML = `<div class="pane tline"><div class="crumb">~/portfolio/timeline/</div><h1>경력</h1><p class="muted">시간순 주요 경력 및 프로젝트</p>
-    <div class="tl-list">${TIMELINE.map(e => `<div class="tl-e"><i></i><div class="tl-d">${esc(e.from)}${e.to ? " — " + esc(e.to) : ""}</div><div class="tl-o">${esc(e.org)}</div>
+    <div class="tl-list">${[...TIMELINE].reverse().map(e => `<div class="tl-e"><i></i><div class="tl-d">${esc(e.from)}${e.to ? " — " + esc(e.to) : ""}</div><div class="tl-o">${esc(e.org)}</div>
       ${e.items.map(it => `<div class="tl-c"><div class="tl-ch"><b>${esc(it.t)}</b></div>${it.b.length ? `<ul>${it.b.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div>`).join("")}</div>`).join("")}</div></div>`;
 }
 
