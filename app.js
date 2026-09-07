@@ -32,9 +32,11 @@ const tick = () => { const d = new Date(); clock.textContent = (isMobile() ? "" 
 tick(); setInterval(tick, 15000);
 
 /* ---------- boot ---------- */
+if (isMobile() && !location.hash) location.replace("cv.html");
 const boot = $("#boot");
 const endBoot = () => boot.classList.add("off");
-setTimeout(endBoot, 1500);
+let seen = false; try { seen = sessionStorage.getItem("booted") === "1"; sessionStorage.setItem("booted", "1"); } catch {}
+setTimeout(endBoot, seen ? 200 : 1500);
 boot.addEventListener("click", endBoot);
 
 /* ---------- apps ---------- */
@@ -162,10 +164,10 @@ desktop.addEventListener("pointerdown", (e) => { if (e.target === desktop) for (
 
 /* ---------- menus ---------- */
 const MENUS = {
-  logo: [["이 사람에 관하여", () => open("about")], null, ["모든 창 닫기", closeAll, "⌘⇧W"], ["다크 모드 전환", () => $("#theme-btn").click()]],
+  logo: [["이 사람에 관하여", () => open("about")], ["읽기 모드 (한 장짜리)", () => location.href = "cv.html"], ["Reading mode (English)", () => location.href = "cv-en.html"], null, ["모든 창 닫기", closeAll, "⌘⇧W"], ["다크 모드 전환", () => $("#theme-btn").click()]],
   file: [["새 Finder 창", () => open("finder"), "⌘N"], ["메모 열기", () => open("notes")], null, ["창 닫기", () => { const t = topWin(); if (t) close(t); }, "⌘W"]],
   go: [...PROJECTS.map(p => [p.name, () => launch(p)]), null, ["터미널", () => open("terminal")], ["연락", () => open("mail")]],
-  help: [["단축키: ⌘K 검색 · ⌘W 닫기 · 아이콘 두 번 클릭", () => open("terminal")], ["GitHub", () => ext(PERSON.github)], ["SSRN", () => ext(PERSON.ssrn)], ["LinkedIn", () => ext(PERSON.linkedin)]],
+  help: [["단축키: ⌘K 검색 · ⌘W 닫기 · 아이콘 두 번 클릭", () => open("terminal")], ["읽기 모드", () => location.href = "cv.html"], ["이력서 PDF", () => ext("cv/jihong-park-cv-ko.pdf")], ["GitHub", () => ext(PERSON.github)], ["SSRN", () => ext(PERSON.ssrn)], ["LinkedIn", () => ext(PERSON.linkedin)]],
 };
 let openMenu = null;
 for (const item of document.querySelectorAll("#menubar .item[data-menu]")) {
@@ -262,7 +264,7 @@ function renderSafari(w, pid) {
 /* ---------- 미리보기 (논문 PDF) ---------- */
 function renderPreview(w, n) {
   const body = $(".body", w.el);
-  body.innerHTML = `<div class="side pv-side"><h6>논문 6편</h6>${PAPERS.map(p => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a></div>
+  body.innerHTML = `<div class="side pv-side"><h6>작업 논문 6편 <span class="wp">working papers · 심사 전</span></h6>${PAPERS.map(p => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
     <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><a class="btn" data-open target="_blank" rel="noopener">새 탭에서 열기</a></div><iframe title="pdf"></iframe></div>`;
   const fr = $("iframe", body), hd = $(".pv-hd", body);
   const show = (num) => {
@@ -473,13 +475,13 @@ function renderMail(w) {
     <div class="row"><b>GitHub</b><a href="${PERSON.github}" target="_blank" rel="noopener">${PERSON.github.replace("https://", "")}</a></div>
     <div class="row"><b>SSRN</b><a href="${PERSON.ssrn}" target="_blank" rel="noopener">${PERSON.ssrn.replace("https://", "")}</a></div>
     <div class="row"><b>LinkedIn</b><a href="${PERSON.linkedin}" target="_blank" rel="noopener">${PERSON.linkedin.replace("https://", "")}</a></div>
-    <div class="btns"><a class="btn pri" href="mailto:${PERSON.email}?subject=${encodeURIComponent("[포트폴리오] 문의")}">메일 쓰기</a></div></div>`;
+    <div class="btns"><a class="btn pri" href="mailto:${PERSON.email}?subject=${encodeURIComponent("[포트폴리오] 문의")}">메일 쓰기</a><a class="btn" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a><a class="btn" href="cv/jihong-park-cv-en.pdf" target="_blank" rel="noopener">CV (English)</a></div></div>`;
 }
 
 /* ---------- 이 사람에 관하여 ---------- */
 function renderAbout(w) {
   const body = $(".body", w.el);
-  body.innerHTML = `<div class="pane"><div class="amac"><div class="pic">JP</div><div>
+  body.innerHTML = `<div class="pane"><div class="amac"><img class="pic" src="img/profile.jpg" alt="박지홍" width="150" height="150"><div>
     <h1 style="margin-bottom:0">${esc(PERSON.name)}</h1><p class="muted">${esc(PERSON.tag)}</p>
     <table>
       <tr><td>학교</td><td>${esc(PERSON.school)} · ${esc(PERSON.grad)}</td></tr>
@@ -497,6 +499,6 @@ setTimeout(() => {
   if (p) launch(p);
   else if (hash && APPS[hash]) open(hash);
   else { open("finder"); if (!isMobile()) setTimeout(() => { const a = open("about"); a.el.style.left = "auto"; a.el.style.right = "120px"; a.el.style.top = "60px"; }, 350); }
-}, 1350);
+}, seen ? 250 : 1350);
 window.addEventListener("resize", () => { for (const w of wins.values()) if (w.el.classList.contains("max")) { Object.assign(w.el.style, { width: innerWidth + "px", height: (innerHeight - 28 - 84) + "px" }); w.el.dispatchEvent(new Event("winresize")); } });
 })();

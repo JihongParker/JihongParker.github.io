@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jihong Park · Reading mode</title>
+<meta name="description" content="Jihong Park, Pusan National University. Six working papers on one WTI × USD/KRW position across budget, trading, accounting and disclosure; an ESG decision-layer ERP; a KOSPI derivative-footnote observatory; 44 interactive quant models; a risk-first trading desk.">
+<meta property="og:title" content="Jihong Park · Portfolio">
+<meta property="og:description" content="Six working papers · HongERP · Hedge Observatory · Quant Lab · Trading Desk">
+<meta property="og:type" content="profile">
+<link rel="alternate" hreflang="ko" href="cv.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23104281'/%3E%3Ctext x='32' y='42' font-size='28' text-anchor='middle' fill='white' font-family='-apple-system,sans-serif' font-weight='700'%3EJP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="cv.css">
+</head>
+<body>
+<nav class="top"><a href="index.html#finder">Desktop view</a><span><a href="cv.html">한국어</a><a href="cv/jihong-park-cv-en.pdf" download>PDF</a></span></nav>
+<main>
+<header class="with-photo">
+  <img class="photo" src="img/profile.jpg" alt="Jihong Park" width="120" height="120">
+  <div>
+  <h1>Jihong Park</h1>
+  <p class="tag">Someone who computes the number and also knows which ledger and which disclosure it lands in.</p>
+  <p class="meta">Pusan National University, Business Administration · expected graduation August 2027 · Busan, Korea</p>
+  <p class="links"><a href="mailto:adrianus026@gmail.com">adrianus026@gmail.com</a> · <a href="https://github.com/JihongParker">GitHub</a> · <a href="https://ssrn.com/author=12066228">SSRN</a> · <a href="https://www.linkedin.com/in/jihongparker">LinkedIn</a></p>
+  </div>
+</header>
+
+<section>
+  <h2>In one paragraph</h2>
+  <p>I took one position, a Korean crude importer's joint WTI and USD/KRW exposure, and worked it through four layers: budget, trading, accounting and disclosure. The calculations became six working papers, the engines went unchanged into an ERP prototype, and the gap the papers admit is now being filled by parsing every derivative footnote on the KOSPI. I speak both the accounting side and the quantitative side.</p>
+</section>
+
+<section>
+  <h2>Six working papers <small>not peer-reviewed · posted on SSRN and ResearchGate</small></h2>
+  <ol class="papers">
+    <li><b>Optimal WTI–FX Hedge Ratios Under a Fixed Budget</b><p>A maturity-matched strip of twelve slices reconciles a monthly budget with option expiries, then re-optimises on a tail-loss objective.</p><a href="papers/Park_hedge_optimization.pdf">PDF</a></li>
+    <li><b>Covariance-Aware Delta Hedging of a Quanto Knock-Out</b><p>A double-barrier quanto hedge whose delta carries the WTI–KRW covariance, framed against the plain collar.</p><a href="papers/Park_Quanto.pdf">PDF</a></li>
+    <li><b>IFRS 9 Cash-Flow Hedge: Combined vs Split Designation</b><p>The same position booked under two designation structures, and how P&amp;L volatility and ineffectiveness differ.</p><a href="papers/Park_CFH.pdf">PDF</a></li>
+    <li><b>Mandatory ESG Disclosure and Corporate Hedging (Korea / KSSB)</b><p>380 KOSPI firms, filings from 2016 to 2024: what governance-report and environmental-disclosure mandates did to hedge-accounting adoption and derivative use.</p><a href="papers/Park_ESG_disclosure.pdf">PDF</a></li>
+    <li><b>KIKO Through the Program</b><p>The 2008 knock-in knock-out episode recomputed in the four-layer frame. A barrier turns market risk into survival risk.</p><a href="papers/Park_KIKO_note.pdf">PDF</a></li>
+    <li><b>The Benign and the Lethal Barrier</b><p>A double-knock-out hedge and KIKO under one calibration: similar knock-out odds, opposite optionality and opposite institutions.</p><a href="papers/Park_KIKO_comparison.pdf">PDF</a></li>
+  </ol>
+  <p class="note">Code and manuscripts: <a href="https://github.com/JihongParker/wti-fx-hedge-program">github.com/JihongParker/wti-fx-hedge-program</a></p>
+</section>
+
+<section>
+  <h2>Things I built</h2>
+  <dl class="projects">
+    <dt>HongERP <a href="https://jihongparker.github.io/hong-erp/">open</a> <a href="https://github.com/JihongParker/hong-erp">repo</a></dt>
+    <dd>An ERP prototype for the decision layer ESG software leaves empty: give it an exposure and it computes how much to hedge and how much to disclose at once. The engines of four papers are frozen as the computational core; an ERP shell with roles, approval queues, an audit trail and fiscal-year close runs on top. React, TypeScript.</dd>
+    <dt>Hedge Observatory <a href="https://jihongparker.github.io/hedge-observatory/">open</a> <a href="https://github.com/JihongParker/hedge-observatory">repo</a></dt>
+    <dd>Reading every derivative footnote of KOSPI-listed firms, classifying and normalising them into a public hedging panel. A four-stage batch (collect, classify, normalise, publish); the site only reads precomputed files. Python, React.</dd>
+    <dt>Quant Lab <a href="https://jihongparker.github.io/quant-lab/">open</a> <a href="https://github.com/JihongParker/quant-lab">repo</a></dt>
+    <dd>44 quantitative models from coursework and the papers, each driven by sliders. A static site with no external libraries; every chart is hand-drawn.</dd>
+    <dt>Trading Desk <a href="index.html#desk">screen</a></dt>
+    <dd>An automated US-equity desk in which strategies never place orders directly; every order passes a risk gate and is journaled. Testing sixteen strategies at once returned no alpha, and drawdown control became the core. Python, SQLite.</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>How I work</h2>
+  <p>I set the ideas and the criteria; a language-model pipeline does the labour-intensive execution. The design of having a model read and classify footnote sentences, the classification rules and the sample checks were mine. When a result looks good I try to overturn it once.</p>
+</section>
+
+<section>
+  <h2>Where I want to go</h2>
+  <p>Sell-side research, a Busan-based financial public institution, or a quant role after a master's abroad. In every case the seat is the same one: the person who computes the number and knows which ledger and which disclosure it lands in.</p>
+</section>
+
+<section>
+  <h2>Tools</h2>
+  <p>Python · TypeScript · Excel VBA · LaTeX · OpenDART · SQLite</p>
+</section>
+</main>
+<footer>Jihong Park · <a href="index.html#finder">Desktop view</a> · <a href="cv.html">한국어</a></footer>
+</body>
+</html>
