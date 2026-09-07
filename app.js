@@ -263,14 +263,14 @@ function renderSafari(w, pid) {
 function renderPreview(w, n) {
   const body = $(".body", w.el);
   body.innerHTML = `<div class="side pv-side"><h6>논문 6편</h6>${PAPERS.map(p => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a></div>
-    <div class="pv"><div class="pv-hd"><div><b></b><p></p><div class="kv"></div></div><a class="btn" data-open target="_blank" rel="noopener">새 탭에서 열기</a></div><iframe title="pdf"></iframe></div>`;
+    <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><a class="btn" data-open target="_blank" rel="noopener">새 탭에서 열기</a></div><iframe title="pdf"></iframe></div>`;
   const fr = $("iframe", body), hd = $(".pv-hd", body);
   const show = (num) => {
     const p = PAPERS.find(x => x.n === num) || PAPERS[0];
     for (const b of body.querySelectorAll(".side button")) b.classList.toggle("on", b.dataset.n === p.n);
     const src = "papers/" + p.file;
     if (!fr.src.endsWith(src)) fr.src = src + "#view=FitH";
-    $("b", hd).textContent = p.n + "  " + p.kr; $("p", hd).textContent = p.p; $(".kv", hd).textContent = p.kv; $("[data-open]", hd).href = src;
+    $("b", hd).textContent = p.n + "  " + p.kr; $("p", hd).textContent = p.p; $("[data-open]", hd).href = src;
     $(".title", w.el).textContent = p.file + " — 미리보기";
   };
   for (const b of body.querySelectorAll(".side button")) b.onclick = () => show(b.dataset.n);
@@ -353,7 +353,7 @@ function renderTerminal(w) {
     help: () => out(`<span class="g">${esc(TERMINAL_HELP)}</span>`),
     ls: () => out(DESK_ITEMS.map(i => `<span class="d">${esc(i.label)}</span>`).join("   ")),
     about: () => out(esc(`${PERSON.name} · ${PERSON.school} · ${PERSON.grad}\n${PERSON.tag}`)),
-    papers: () => out(PAPERS.map(p => `<span class="y">${p.n}</span>  ${esc(p.kr)}\n     <span class="g">${esc(p.kv)}</span>`).join("\n")),
+    papers: () => out(PAPERS.map(p => `<span class="y">${p.n}</span>  ${esc(p.kr)}`).join("\n")),
     projects: () => out(PROJECTS.map(p => `<span class="y">${esc(p.id.padEnd(7))}</span> ${esc(p.name)}  <span class="g">${esc(p.sub)}</span>`).join("\n")),
     contact: () => out(`mail    <a href="mailto:${PERSON.email}">${PERSON.email}</a>\ngithub  <a href="${PERSON.github}" target="_blank" rel="noopener">${PERSON.github}</a>\nssrn    <a href="${PERSON.ssrn}" target="_blank" rel="noopener">${PERSON.ssrn}</a>`),
     open: (a) => { const p = PROJECTS.find(x => x.id === a); if (p) return launch(p); if (APPS[a]) return open(a); out(`<span class="y">open: ${esc(a || "")}: 없는 이름. help 참고</span>`); },
