@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>박지홍 · Portfolio</title>
+<meta name="description" content="박지홍 포트폴리오. WTI·FX 헤지 논문 6편, ESG 의사결정층 ERP, 상장사 헤지 관측소, 계량 모형 44종. 회계·금융 도메인을 이해하는 계량 설계.">
+<meta property="og:title" content="박지홍 · Portfolio">
+<meta property="og:description" content="헤지 논문 6편 · HongERP · Hedge Observatory · Quant Lab">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#104281">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23104281'/%3E%3Ctext x='32' y='42' font-size='28' text-anchor='middle' fill='white' font-family='-apple-system,sans-serif' font-weight='700'%3EJP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="boot"><div class="mark">JP</div><div class="bar"><i></i></div></div>
+
+<div id="menubar">
+  <div class="l">
+    <div class="item logo" data-menu="logo">JP</div>
+    <div class="item app">Finder</div>
+    <div class="item hide-m" data-menu="file">파일</div>
+    <div class="item" data-menu="go">이동</div>
+    <div class="item hide-m" data-menu="help">도움말</div>
+  </div>
+  <div class="r">
+    <button class="item" id="theme-btn" title="다크 모드 전환"><span id="theme-ic"></span></button>
+    <button class="item" id="spot-btn" title="검색 (⌘K)"><svg viewBox="0 0 24 24"><path d="M10 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.3 9.9l4.4 4.4-1.4 1.4-4.4-4.4z"/></svg></button>
+    <div class="item hide-m" title="Wi-Fi"><svg viewBox="0 0 24 24"><path d="M12 20a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm-4.2-5.2l-1.4-1.4a8 8 0 0 1 11.2 0l-1.4 1.4a6 6 0 0 0-8.4 0zM4.9 11.9 3.5 10.5a12 12 0 0 1 17 0l-1.4 1.4a10 10 0 0 0-14.2 0z"/></svg></div>
+    <div class="item hide-m" title="배터리"><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v1h1v6h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm2 0v8h13V8zm1 1h9v6H6z"/></svg></div>
+    <div class="item clock" id="clock"></div>
+  </div>
+</div>
+
+<div id="desktop"><div id="icons"></div></div>
+
+<div id="spot"><div class="box"><input placeholder="Spotlight 검색: 논문, HongERP, 연락 …"><ul></ul></div></div>
+
+<div id="dock"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
