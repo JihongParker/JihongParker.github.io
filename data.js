@@ -25,7 +25,7 @@ window.PERSON = {
   email: "adrianus026@gmail.com",
   github: "https://github.com/JihongParker",
   ssrn: "https://ssrn.com/author=12066228",
-  linkedin: "", /* URL 확정 시 기입 */
+  linkedin: "https://www.linkedin.com/in/jihongparker",
   certs: [
     ["TOEIC 960", "2024-05, YBM"],
     ["전산회계 1급", "2025-10, 한국세무사회"],
