@@ -1,4 +1,3 @@
-/* 콘텐츠·아이콘. 문구 수정은 여기서만. */
 window.ICONS = {
   folder: (c1="#5ab0f7", c2="#2f8ce8") => `<svg viewBox="0 0 64 64"><defs><linearGradient id="f${c1.slice(1)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><path d="M6 16a4 4 0 0 1 4-4h14l5 5h25a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" fill="${c2}" opacity=".85"/><path d="M6 24a4 4 0 0 1 4-4h44a4 4 0 0 1 4 4v26a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" fill="url(#f${c1.slice(1)})"/></svg>`,
   doc: (label="TXT") => `<svg viewBox="0 0 64 64"><path d="M14 4h26l12 12v42a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="#fff" stroke="#c8c8cc"/><path d="M40 4v12h12" fill="#e6e6ea"/><g stroke="#9a9aa1" stroke-width="2"><path d="M20 30h24M20 37h24M20 44h16"/></g><text x="32" y="58" font-size="9" text-anchor="middle" fill="#6e6e73" font-family="-apple-system,sans-serif" font-weight="700">${label}</text></svg>`,
@@ -15,141 +14,96 @@ window.ICONS = {
   quant: `<svg viewBox="0 0 64 64"><defs><linearGradient id="qa" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#6e4ff6"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="13" fill="url(#qa)"/><path d="M12 46c6 0 6-24 12-24s6 18 12 18 6-30 12-30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><text x="46" y="50" font-size="14" fill="#fff" font-family="Georgia,serif" font-style="italic">σ</text></svg>`,
   desk: `<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="13" fill="#1f2937"/><g stroke-width="3" stroke-linecap="round"><path d="M14 40l10-12 8 8 8-16 10 6" fill="none" stroke="#34d399"/></g><rect x="14" y="46" width="36" height="4" rx="2" fill="#4b5563"/><circle cx="50" cy="26" r="3" fill="#f87171"/></svg>`,
   pdf: `<svg viewBox="0 0 64 64"><path d="M14 4h26l12 12v42a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="#fff" stroke="#c8c8cc"/><path d="M40 4v12h12" fill="#e6e6ea"/><rect x="10" y="34" width="34" height="16" rx="3" fill="#e0342b"/><text x="27" y="46" font-size="10" text-anchor="middle" fill="#fff" font-family="-apple-system,sans-serif" font-weight="700">PDF</text></svg>`,
+  preview: `<svg viewBox="0 0 64 64"><defs><linearGradient id="pv" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5ed3ff"/><stop offset="1" stop-color="#1b8ee0"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="13" fill="url(#pv)"/><rect x="14" y="14" width="36" height="36" rx="4" fill="#fff"/><path d="M14 40l10-10 8 8 6-6 12 12v6H14z" fill="#8fd3ff"/><circle cx="40" cy="24" r="4" fill="#ffd60a"/></svg>`,
   github: `<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="13" fill="#24292f"/><path d="M32 14a18 18 0 0 0-5.7 35.1c.9.2 1.2-.4 1.2-.9v-3.1c-5 1.1-6.1-2.1-6.1-2.1-.8-2.1-2-2.6-2-2.6-1.6-1.1.1-1.1.1-1.1 1.8.1 2.8 1.9 2.8 1.9 1.6 2.8 4.3 2 5.3 1.5.2-1.2.6-2 1.2-2.4-4-.5-8.2-2-8.2-8.9 0-2 .7-3.6 1.9-4.8-.2-.5-.8-2.3.2-4.8 0 0 1.5-.5 5 1.8a17 17 0 0 1 9 0c3.4-2.3 5-1.8 5-1.8 1 2.5.4 4.3.2 4.8 1.2 1.2 1.9 2.8 1.9 4.8 0 6.9-4.2 8.4-8.2 8.9.6.6 1.2 1.7 1.2 3.4v5c0 .5.3 1.1 1.2.9A18 18 0 0 0 32 14z" fill="#fff"/></svg>`,
 };
 
 window.PERSON = {
   name: "박지홍", en: "Jihong Park",
-  tag: "회계·금융 도메인을 이해하는 계량 설계",
-  school: "부산대학교 경영학과", grad: "2027-08 졸업예정", gpa: "3.69 / 4.5",
+  tag: "숫자를 계산하고, 그 숫자가 어느 장부와 어느 공시에 실리는지까지 아는 사람",
+  school: "부산대학교 경영학과", grad: "2027년 8월 졸업 예정",
   email: "adrianus026@gmail.com",
   github: "https://github.com/JihongParker",
   ssrn: "https://ssrn.com/author=12066228",
   linkedin: "https://www.linkedin.com/in/jihongparker",
-  certs: [
-    ["TOEIC 960", "2024-05, YBM"],
-    ["전산회계 1급", "2025-10, 한국세무사회"],
-    ["전산세무 2급", "2025-10, 한국세무사회"],
-    ["ERP정보관리사 회계 1급", "2025-10, 한국생산성본부"],
-    ["컴퓨터활용능력 2급", "2022-10, 대한상공회의소"],
-  ],
-  tools: ["Python (numpy·scipy·pandas)", "TypeScript·React", "LaTeX", "Excel VBA", "OpenDART API", "SQLite", "FnGuide", "SPSS"],
-  exp: [
-    ["2025-03 ~ 현재", "UK어학원 강사"],
-    ["2024-04 ~ 2025-03", "한스어학원 강사"],
-    ["2025-09 ~ 2025-12", "캠코 함께그리는미래 멘토링 이수 (복지시설 아동 영어 지도)"],
-    ["2022-10 ~ 2024-04", "육군 병장 만기전역"],
-  ],
+  tools: ["Python", "TypeScript", "Excel VBA", "LaTeX", "OpenDART", "SQLite"],
 };
 
+/* 위젯 = 바로 여는 것. live 가 있으면 Safari, pdf 는 미리보기, app 은 내장 앱 */
 window.PROJECTS = [
   {
-    id: "papers", name: "헤지 논문 6편", en: "WTI–FX Hedge Program", icon: "papers", kind: "연구",
-    one: "한국 정유수입사의 WTI × 원달러 결합 노출 하나를 예산·트레이딩·회계·공시 네 층으로 풀어낸 연작.",
-    why: "교과서는 헤지비율 한 줄로 끝나지만 실무는 예산 한도, 배리어 상품, IFRS 9 지정, 공시 의무가 한 포지션 위에 겹친다. 그 겹침을 한 캘리브레이션으로 통째로 계산해 보고 싶었다.",
-    look: [
-      "P4: 코스피 380사 × 9년(2016~2024) OpenDART 패널로 공시 의무화가 헤지회계 채택·파생 사용에 준 효과를 정밀 null(±6pp)로 확정",
-      "P1: 만기 정합 12슬라이스 스트립과 CVaR95 목적, 매칭만으로 연 95.3bn 절감",
-      "P5·P6: KIKO 사태를 같은 프레임으로 재구성, 보호 레그 사망률 95~100%, 배리어 사망률은 대칭이지만 옵션성 방향과 제도가 비대칭",
-    ],
-    stack: ["Python", "LaTeX", "Excel VBA", "OpenDART"],
-    stats: [["6", "논문 (SSRN·ResearchGate)"], ["380", "패널 기업 수"], ["3,420", "기업-연도 관측"]],
-    links: [["SSRN 저자 페이지", "https://ssrn.com/author=12066228"], ["코드·TeX", "https://github.com/JihongParker/wti-fx-hedge-program"]],
+    id: "papers", name: "헤지 논문 6편", sub: "한 포지션, 네 층", icon: "papers", kind: "연구", app: "preview",
+    one: "한국 정유수입사가 지는 WTI와 원달러 결합 노출 하나를 예산, 트레이딩, 회계, 공시 네 층으로 나눠 푼 연작입니다.",
+    look: ["4편: 코스피 380사 9년치 공시로 공시 의무화가 헤지에 준 효과를 정밀하게 0으로 확정", "1편: 만기를 맞춘 12조각 스트립만으로 연 951억 절감", "5편과 6편: KIKO 사태를 같은 틀로 다시 계산"],
+    links: [["SSRN", "https://ssrn.com/author=12066228"], ["코드와 원고", "https://github.com/JihongParker/wti-fx-hedge-program"]],
   },
   {
-    id: "erp", name: "HongERP", en: "ESG decision-layer ERP", icon: "erp", kind: "웹앱", live: "https://jihongparker.github.io/hong-erp/",
-    one: "ESG 플랫폼들이 비워 둔 결정 층을 채운 ERP 프로토타입. 노출을 넣으면 얼마나 헤지하고 얼마나 공시할지를 동시에 계산한다.",
-    why: "4대 법인의 ESG 솔루션을 벤치마크해 보니 전부 기록에서 멈춘다. 논문 4편의 엔진을 동결해 연산 코어로 두고 그 위에 역할·원장·결재·감사추적을 갖춘 ERP 셸을 얹었다.",
-    look: [
-      "Overview의 인과 흐름: 중대성 → 공시 → 예산 → 데스크 → 회계",
-      "예산 화면의 생존 헤어컷 스위치 패널: 낙아웃 소멸 확률에 따라 장부가 바닐라로 넘어가는 손익분기(스트레스 14.5배)",
-      "docs/ARCHITECTURE.md: 계층도·권한 매트릭스·원장 스키마·CI 수치 인증",
-    ],
-    stack: ["React 19", "TypeScript", "Vite", "GitHub Actions"],
-    stats: [["4", "엔진 (논문 1편당 1개)"], ["5", "모듈"], ["CI", "엔진 수치 인증"]],
-    links: [["라이브", "https://jihongparker.github.io/hong-erp/"], ["리포", "https://github.com/JihongParker/hong-erp"]],
+    id: "erp", name: "HongERP", sub: "ESG 의사결정층 ERP", icon: "erp", kind: "웹앱", live: "https://jihongparker.github.io/hong-erp/",
+    one: "ESG 소프트웨어들이 비워 둔 결정 층을 채운 시제품입니다. 노출을 넣으면 얼마나 헤지하고 얼마나 공시할지를 한 번에 계산합니다.",
+    look: ["개요 화면의 인과 흐름: 중대성에서 공시, 예산, 데스크, 회계로", "예산 화면 아래 생존 헤어컷 패널: 낙아웃이 사라질 확률에 따라 장부가 바닐라로 넘어가는 지점", "역할별 권한, 결재 대기열, 감사 추적, 회계연도 마감까지 갖춘 셸"],
+    links: [["저장소", "https://github.com/JihongParker/hong-erp"]],
   },
   {
-    id: "obs", name: "Hedge Observatory", en: "헤지 관측소", icon: "obs", kind: "데이터", live: "https://jihongparker.github.io/hedge-observatory/",
-    one: "코스피 상장사 파생상품 각주를 전수 판별·파싱·정규화해 공개 기업 헤지 패널로 만드는 진행 중 프로젝트.",
-    why: "논문 P4가 스스로 인정한 공백이 각주 이질성이다. 13개사 파일럿에서 수치표 정합이 1곳뿐이었다. 그 공백을 실데이터 규모로 메우는 후속.",
-    look: [
-      "Coverage: 파일럿 실측만 표시, 예시 목업 없음",
-      "Pipeline: 수집 → 판별 → 정규화 → 공개 4단계 배치. LLM은 모호 건에만 1회, 사이트는 정적 panel.json만 읽어 로드당 토큰 0",
-      "KSSB: 공시 제도화 일정 추적",
-    ],
-    stack: ["Python", "React", "TypeScript", "OpenDART", "launchd"],
-    stats: [["2,391", "코스피 모집단"], ["4", "배치 단계"], ["v0", "현재 상태"]],
-    links: [["라이브", "https://jihongparker.github.io/hedge-observatory/"], ["리포", "https://github.com/JihongParker/hedge-observatory"]],
+    id: "obs", name: "헤지 관측소", sub: "상장사 파생 각주 전수 파싱", icon: "obs", kind: "데이터", live: "https://jihongparker.github.io/hedge-observatory/",
+    one: "코스피 상장사의 파생상품 각주를 전부 읽어 판별하고 정규화해서 공개 헤지 패널로 만드는 중입니다.",
+    look: ["커버리지: 실제로 읽은 것만 표시, 예시 화면 없음", "파이프라인: 수집, 판별, 정규화, 공개 네 단계. 화면은 미리 계산된 파일만 읽음", "KSSB 공시 제도화 일정 추적"],
+    links: [["저장소", "https://github.com/JihongParker/hedge-observatory"]],
   },
   {
-    id: "quant", name: "Quant Lab", en: "44 interactive models", icon: "quant", kind: "웹앱", live: "https://jihongparker.github.io/quant-lab/",
-    one: "계량 모형 44종을 슬라이더로 만져 보는 정적 사이트. 외부 의존성 0, 캔버스 차트 직접 구현.",
-    why: "수업과 논문에서 쓴 모형을 표와 수식으로만 두면 남이 못 만진다. 시트 발췌 106개와 동적 엔진 44개를 한 화면에서 이어 놓았다.",
-    look: [
-      "홈 히어로의 WebGL 유체 셰이더와 통계 칩",
-      "동적 엔진 캐러셀: 촐레스키 산점, 변동성 표면 등 실시간 재계산",
-      "시트 발췌: 값·수식·스타일을 그대로 옮긴 106개 표",
-    ],
-    stack: ["Vanilla JS", "Canvas", "WebGL"],
-    stats: [["44", "동적 엔진"], ["106", "시트 발췌"], ["0", "외부 의존성"]],
-    links: [["라이브", "https://jihongparker.github.io/quant-lab/"], ["리포", "https://github.com/JihongParker/quant-lab"]],
+    id: "quant", name: "퀀트 랩", sub: "계량 모형 44종", icon: "quant", kind: "웹앱", live: "https://jihongparker.github.io/quant-lab/",
+    one: "수업과 논문에서 쓴 계량 모형 44종을 슬라이더로 직접 만져 보는 곳입니다. 바깥 라이브러리 없이 전부 직접 그렸습니다.",
+    look: ["첫 화면의 유체 셰이더", "동적 엔진 캐러셀: 촐레스키 산점, 변동성 표면", "시트 발췌 106개: 값과 수식을 그대로 옮김"],
+    links: [["저장소", "https://github.com/JihongParker/quant-lab"]],
   },
   {
-    id: "desk", name: "Trading Desk", en: "리스크 우선 자동 데스크", icon: "desk", kind: "시스템",
-    one: "미국 주식 자동 트레이딩 데스크. 16전략 다중검정 결과 알파가 없다는 결론을 스스로 내고 리스크 관리로 방향을 바꿨다.",
-    why: "처음 결론은 모멘텀·저변동 50:50이 알파라는 것이었다. 비용 후 동일가중 buy-hold를 못 이기고 대형주 베타(상관 0.86)일 뿐임을 반증했다. 남는 엣지는 변동성 목표 낙폭통제 하나였다.",
-    look: [
-      "Strategy → Signal → Orchestrator → RiskGate → Broker → Journal(SQLite) 구조. 전략은 주문을 직접 내지 않는다",
-      "다중검정: DSR 0.07, PBO 5%. 관측 최고 Sharpe 1.09 < 탐색 운 기대 1.49",
-      "launchd 상주, 뉴스 LLM 층은 검증 중 가설로 강등",
-    ],
-    stack: ["Python 3.12", "SQLite", "launchd", "Toss API"],
-    stats: [["16", "전략 검정"], ["0.07", "DSR"], ["4", "위기 구간 MDD 반토막"]],
+    id: "desk", name: "트레이딩 데스크", sub: "페이퍼 모드", icon: "desk", kind: "시스템", app: "desk",
+    one: "미국 주식 자동 데스크입니다. 전략 16개를 한꺼번에 검정했더니 알파가 없다는 답이 나왔고, 그 뒤로는 리스크 관리가 본체가 됐습니다.",
+    look: [],
     links: [],
-    note: "비공개 저장소. 연구 노트로 정리해 공개할 예정.",
   },
 ];
 
 window.PAPERS = [
-  { n: "01", en: "Optimal WTI–FX hedge ratios under a fixed budget", kr: "고정 예산 하 WTI·FX 최적 헤지비율 배분",
-    p: "월 예산과 옵션 만기의 불일치를 12슬라이스 스트립으로 정합시키고 CVaR95 목적으로 재최적화.", kv: "연 권한 540bn · 매칭 절감 95.3bn · κ=2에서 권한 정확 소진" },
-  { n: "02", en: "Covariance-aware delta hedging of a quanto knock-out", kr: "콴토 낙아웃의 공분산 인식 델타헤지",
-    p: "WTI와 원달러 공분산을 델타에 반영한 더블 배리어 콴토 헤지. 칼라 대비 프레이밍.", kv: "사전계산 표면 · 배리어 리스크 모니터" },
-  { n: "03", en: "IFRS 9 cash-flow hedge: combined vs split designation", kr: "IFRS 9 현금흐름위험회피, 통합 vs 분리 지정",
-    p: "같은 포지션을 A/B 두 지정 구조로 회계처리했을 때 손익 변동성과 비효과 부분 차이.", kv: "구조 A/B · 옵션 기반 생산 엔진" },
-  { n: "04", en: "Mandatory ESG disclosure and corporate hedging (Korea / KSSB)", kr: "의무 ESG 공시와 기업 헤지",
-    p: "코스피 380사 × 2016~2024 OpenDART 패널. 지배구조보고서·환경정보 의무화가 헤지회계 채택과 파생 사용에 준 효과.", kv: "정밀 null ±6pp · 3,420 기업-연도 · 2030~31 단계적 시행 예측" },
-  { n: "05", en: "KIKO through the program", kr: "KIKO 사태 응용 노트",
-    p: "2008 KIKO(1풋 2콜)를 네 층 프레임으로 재구성. 배리어는 시장위험을 생존위험으로 바꾼다.", kv: "내재 이전 노셔널 5.0% · 보호 레그 사망률 95~100% · P(KI | +5%)=0.968" },
-  { n: "06", en: "The benign and the lethal barrier", kr: "무해한 배리어와 치명적 배리어: 더블 KO 헤지 vs KIKO",
-    p: "같은 캘리브레이션에서 두 상품을 비교. 사망률은 대칭, 옵션성 방향과 제도가 비대칭.", kv: "89.25% vs 90~100% · +25% 절하에서 바닐라 보험료의 20배 손실" },
+  { n: "01", file: "Park_hedge_optimization.pdf", kr: "고정 예산 아래 WTI와 원달러 헤지비율 배분", p: "월 예산과 옵션 만기가 어긋나는 문제를 12조각 스트립으로 맞추고, 꼬리 손실 기준으로 다시 최적화했습니다.", kv: "연 권한 5,400억 · 만기 맞추기만으로 951억 절감" },
+  { n: "02", file: "Park_Quanto.pdf", kr: "콴토 낙아웃의 공분산 인식 델타헤지", p: "WTI와 원달러의 공분산을 델타에 넣은 두 배리어 콴토 헤지입니다. 칼라와 견주어 어디서 갈라지는지 봅니다.", kv: "미리 계산한 가격 표면 · 배리어 위험 감시" },
+  { n: "03", file: "Park_CFH.pdf", kr: "IFRS 9 현금흐름위험회피, 통합 지정과 분리 지정", p: "같은 포지션을 두 가지 지정 구조로 회계처리했을 때 손익 변동과 비효과 부분이 어떻게 달라지는지 계산했습니다.", kv: "구조 A와 B · 옵션 기반 엔진" },
+  { n: "04", file: "Park_ESG_disclosure.pdf", kr: "의무 ESG 공시와 기업 헤지", p: "코스피 380사의 2016년부터 2024년까지 공시로, 지배구조보고서와 환경정보 의무화가 헤지회계 채택과 파생 사용에 준 효과를 쟀습니다.", kv: "효과 0을 오차 6%p 안에서 확정 · 3,420 기업연도 · 2030년 전후 시행 예측" },
+  { n: "05", file: "Park_KIKO_note.pdf", kr: "KIKO 사태를 같은 틀로 다시 읽기", p: "2008년 KIKO를 네 층 틀로 다시 계산했습니다. 배리어는 시장위험을 생존위험으로 바꿉니다.", kv: "숨은 이전 노셔널의 5.0% · 보호 다리 소멸 95~100% · 5% 절하 시 낙인 확률 0.968" },
+  { n: "06", file: "Park_KIKO_comparison.pdf", kr: "무해한 배리어와 치명적 배리어", p: "같은 조건에서 두 배리어 헤지와 KIKO를 견줬습니다. 소멸 확률은 비슷한데 옵션의 방향과 제도가 갈랐습니다.", kv: "89.25% 대 90~100% · 25% 절하 시 바닐라 보험료의 20배 손실" },
 ];
 
 window.NOTES = [
-  { t: "자기소개", d: "한 문단", b: `<h1>박지홍</h1><p class="muted">부산대학교 경영학과 · 2027-08 졸업예정</p>
-<p>파생상품 헤지비율을 계산하다가 예산 한도, IFRS 9 지정, ESG 공시가 같은 포지션 위에 겹친다는 것을 알게 됐고, 그 겹침을 한 캘리브레이션으로 계산하는 논문 여섯 편을 썼습니다. 그 엔진을 동결해 ERP 프로토타입에 넣었고, 논문이 남긴 공백을 상장사 각주 전수 파싱으로 메우는 중입니다.</p>
-<p>회계 자격(전산회계 1급·전산세무 2급·ERP정보관리사 회계 1급)과 계량 도구(Python·VBA·TypeScript)를 같이 쓰는 것이 강점입니다. 학점은 2.70에서 시작해 3.25, 3.83, 4.14, 4.19로 올렸습니다.</p>` },
-  { t: "작업 방식", d: "무엇을 직접 했나", b: `<h1>작업 방식</h1>
-<p>아이디어, 검증 기준, 표본 검증은 제가 만들고 실행은 LLM 파이프라인에 맡깁니다. 예를 들어 파생상품 각주의 언어를 LLM이 판별·파싱하게 만들자는 설계와 그 판별 기준, 표본 대조는 제가 했고, 대량 처리는 파이프라인이 했습니다.</p>
-<p>결과가 마음에 안 들면 반증합니다. 트레이딩 데스크의 첫 결론(모멘텀·저변동 알파)은 제 손으로 뒤집었고, 그 뒤 설계 원칙은 "알파는 희소하니 엣지는 리스크 관리"로 바뀌었습니다.</p>
-<div class="note">모든 사이트는 정적 배포이고 로드당 토큰 0입니다. 계산은 사전에 하고 화면은 읽기만 합니다.</div>` },
-  { t: "자격·도구", d: "표", b: `<h1>자격·어학</h1><table class="tbl"></table><h2>도구</h2><div class="chips" data-tools></div>` },
-  { t: "경로", d: "가고 싶은 곳", b: `<h1>가고 싶은 곳</h1>
-<ul><li><b>셀사이드 리서치</b>: 파생·헤지 각주를 읽는 눈과 패널 회귀를 돌리는 손을 같이 씁니다.</li>
-<li><b>금융공기업(부산)</b>: 거래소·예탁원·캠코·주금공. 공시 제도와 파생 인프라를 다루는 자리.</li>
-<li><b>해외 석사 → 퀀트</b>: SSRN 포트폴리오가 가장 높게 평가되는 시장.</li></ul>
-<p class="muted">공통점은 하나입니다. 숫자를 계산하는 사람이 그 숫자가 어느 장부·어느 공시에 실리는지도 아는 자리.</p>` },
+  { t: "자기소개", d: "누구인가", b: `<h1>박지홍</h1><p class="muted">부산대학교 경영학과, 2027년 8월 졸업 예정</p>
+<p>파생상품 헤지비율을 계산하다가 알게 된 게 있습니다. 예산 한도, IFRS 9 지정, ESG 공시가 전부 같은 포지션 위에 겹쳐 있다는 겁니다. 그 겹침을 한 번에 계산해 보려고 논문 여섯 편을 썼고, 거기서 나온 엔진을 그대로 ERP 시제품에 넣었습니다. 지금은 논문이 남긴 빈자리를 상장사 각주를 전부 읽는 방식으로 메우는 중입니다.</p>
+<p>회계 쪽 언어와 계산 쪽 언어를 둘 다 씁니다. 각주를 읽는 사람과 회귀를 돌리는 사람이 보통 다른데, 저는 그 둘을 한 사람이 하면 어디까지 갈 수 있는지 보고 싶습니다.</p>` },
+  { t: "일하는 방식", d: "무엇을 직접 하나", b: `<h1>일하는 방식</h1>
+<p>생각과 기준은 제가 세우고, 손이 많이 가는 실행은 언어모델 파이프라인에 맡깁니다. 각주의 문장을 모델이 읽고 분류하게 하자는 설계, 그 분류 기준, 표본을 뽑아 맞는지 대조하는 일은 제가 했습니다. 수천 건을 돌리는 건 파이프라인이 했습니다.</p>
+<p>결과가 마음에 들어도 한 번은 뒤집어 봅니다. 트레이딩 데스크의 첫 결론은 모멘텀과 저변동을 섞으면 알파가 난다는 것이었는데, 제 손으로 반증했습니다. 그 뒤로 설계 원칙은 하나로 줄었습니다. 알파는 드물고, 남는 건 리스크 관리라는 것.</p>
+<div class="note">여기 있는 사이트는 전부 정적으로 배포돼 있습니다. 계산은 미리 해 두고 화면은 읽기만 합니다.</div>
+<h2>쓰는 도구</h2><div class="chips" data-tools></div>` },
+  { t: "가고 싶은 곳", d: "세 갈래", b: `<h1>가고 싶은 곳</h1>
+<p>세 갈래를 보고 있습니다.</p>
+<p>첫째는 증권사 리서치입니다. 상장사 각주에서 파생상품과 헤지를 읽어내는 눈과, 그걸 패널로 묶어 회귀를 돌리는 손을 한 사람이 다 갖는 경우는 드뭅니다. 저는 둘 다 해 봤습니다.</p>
+<p>둘째는 부산에 있는 금융공기업입니다. 거래소, 예탁결제원, 캠코, 주택금융공사처럼 공시 제도와 파생 인프라를 직접 굴리는 곳입니다. 제 논문이 다루는 제도가 바로 이 기관들이 만드는 제도입니다.</p>
+<p>셋째는 해외 석사를 거쳐 퀀트로 가는 길입니다. 논문으로 쌓아 둔 것을 가장 후하게 쳐주는 시장이라서요.</p>
+<p>어느 쪽이든 바라는 자리는 하나입니다. 숫자를 계산하는 사람이, 그 숫자가 어느 장부와 어느 공시에 실리는지까지 아는 자리.</p>` },
 ];
 
-window.TERMINAL_HELP = `사용 가능한 명령
+/* 트레이딩 데스크 (페이퍼 모드, 실계좌 수치 없음) */
+window.DESK = {
+  strategies: [["SmaCross", "이동평균 교차, 기준선"], ["RSI(2)", "평균회귀"], ["TSMOM", "시계열 모멘텀, 변동성 역가중"], ["News", "뉴스 언어모델 신호, 검증 중 가설"]],
+  gates: [["주문 한 건", "자본의 20% 이하"], ["종목 하나", "자본의 32% 이하"], ["하루 손실", "자본의 2%에서 서킷 발동"], ["거래", "전면 꺼짐, 페이퍼만"]],
+  tests: [["16", "검정한 전략"], ["0.07", "다중검정 보정 샤프"], ["5%", "과적합 확률"], ["1.09 < 1.49", "최고 샤프 대 운으로 기대되는 최고치"]],
+  crises: [["닷컴 붕괴", "2000-03-24", "2002-10-09"], ["금융위기", "2007-10-09", "2009-03-09"], ["코로나", "2020-02-19", "2020-03-23"], ["금리 인상", "2022-01-03", "2022-10-12"]],
+};
+
+window.TERMINAL_HELP = `쓸 수 있는 명령
   help            이 목록
   ls              바탕화면 항목
   about           자기소개
   papers          논문 6편
   projects        프로젝트 목록
-  skills          자격·도구
   contact         연락처
-  open <이름>     창 열기 (예: open erp, open papers, open safari)
-  neofetch        스펙 카드
-  clear           화면 지우기`;
+  open <이름>     열기 (erp, obs, quant, desk, papers, notes, mail)
+  neofetch        요약 카드
+  clear           지우기`;
