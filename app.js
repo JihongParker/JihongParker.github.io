@@ -46,7 +46,7 @@ const APPS = {
   terminal: { title: "터미널",    icon: ICONS.terminal, w: 700,  h: 440, render: renderTerminal },
   mail:     { title: "연락",      icon: ICONS.mail,     w: 560,  h: 360, render: renderMail },
   about:    { title: "이 사람에 관하여", icon: ICONS.settings, w: 600, h: 380, render: renderAbout },
-  desk:     { title: "트레이딩 데스크", icon: ICONS.desk, w: 1000, h: 720, render: renderDesk },
+  desk:     { title: "트레이딩 데스크", icon: ICONS.desk, w: 1360, h: 800, render: renderDesk },
 };
 /* 위젯 → 바로 열기 */
 const launch = (p) => p.live ? open("safari", p.id) : open(p.app);
@@ -149,7 +149,7 @@ dock.addEventListener("pointerleave", () => { for (const d of dock.querySelector
 const iconsBox = $("#icons");
 const DESK_ITEMS = [
   ...PROJECTS.map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
-  { label: "자기소개.txt", icon: ICONS.doc("TXT"), run: () => open("notes") },
+  { label: "메모.txt", icon: ICONS.doc("TXT"), run: () => open("notes") },
   { label: "GitHub", icon: ICONS.github, run: () => ext(PERSON.github) },
 ];
 for (const it of DESK_ITEMS) {
@@ -218,7 +218,7 @@ function renderFinder(w) {
   const groups = {
     "포트폴리오": PROJECTS.map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
     "논문": PAPERS.map(p => ({ label: `${p.n}_${p.kr}.pdf`, icon: ICONS.pdf, run: () => open("preview", p.n) })),
-    "자기소개": NOTES.map((n, i) => ({ label: n.t + ".txt", icon: ICONS.doc("TXT"), run: () => open("notes", i) })),
+    "메모": NOTES.map((n, i) => ({ label: n.t + ".txt", icon: ICONS.doc("TXT"), run: () => open("notes", i) })),
     "연락": [{ label: "메일", icon: ICONS.mail, run: () => open("mail") }, { label: "GitHub", icon: ICONS.github, run: () => ext(PERSON.github) }],
   };
   body.innerHTML = `<div class="side"><h6>즐겨찾기</h6>${Object.keys(groups).map((g, i) => `<button class="${i ? "" : "on"}" data-g="${esc(g)}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(g)}</button>`).join("")}</div>
@@ -277,68 +277,138 @@ function renderPreview(w, n) {
   w.onArg = show; show(n);
 }
 
-/* ---------- 트레이딩 데스크 (페이퍼 모드) ---------- */
+/* ---------- 트레이딩 데스크 (실제 데스크 화면 재현, 페이퍼 모드) ---------- */
+const DESK_NAMES = { SPY: "S&P500 ETF", NVDA: "엔비디아", AAPL: "애플", TSLA: "테슬라", LLY: "일라이릴리", MO: "알트리아", C: "씨티그룹", GOOG: "알파벳", GOOGL: "알파벳A", QCOM: "퀄컴", GILD: "길리어드", CAT: "캐터필러", JPM: "JP모건" };
 function renderDesk(w) {
-  const body = $(".body", w.el);
-  body.innerHTML = `<div class="pane desk">
-    <div class="hd"><div class="ic">${ICONS.desk}</div><div><h1>트레이딩 데스크 <span class="badge">페이퍼 모드</span></h1><div class="sub">실계좌 수치는 표시하지 않습니다. 아래 곡선은 공개 시세(SPY 주간 종가, 1993년부터)로 이 화면에서 바로 계산한 것입니다.</div></div></div>
-    <div class="stats">${DESK.tests.map(s => `<div class="stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("")}</div>
-    <h2>남은 엣지 하나: 변동성 목표로 낙폭 줄이기</h2>
-    <div class="ctl"><label>목표 변동성 <output data-o="tv">10%</output><input type="range" data-tv min="5" max="20" value="10"></label><label>실현변동성 창 <output data-o="lb">12주</output><input type="range" data-lb min="4" max="26" value="12"></label><span class="muted">레버리지 상한 1, 비용 0. 방향을 보는 그림이지 성과 약속이 아닙니다.</span></div>
-    <div class="chart"><canvas></canvas><div class="tip" hidden></div><div class="legend"><span><i style="background:var(--s1)"></i>매수 후 보유</span><span><i style="background:var(--s2)"></i>변동성 목표</span></div></div>
-    <table class="tbl2"><thead><tr><th>구간</th><th>매수 후 보유 최대낙폭</th><th>변동성 목표 최대낙폭</th><th>차이</th></tr></thead><tbody data-crisis></tbody></table>
-    <div class="two">
-      <div><h2>구조</h2><p class="flow">전략 → 신호 → 조정자 → 리스크 게이트 → 브로커 → 장부</p><p class="muted">전략은 주문을 직접 내지 않습니다. 모든 주문은 게이트를 지나고 장부에 남습니다.</p>
-        <h2>리스크 게이트</h2><ul>${DESK.gates.map(g => `<li><b>${esc(g[0])}</b> ${esc(g[1])}</li>`).join("")}</ul></div>
-      <div><h2>전략 4종</h2><ul>${DESK.strategies.map(s => `<li><b>${esc(s[0])}</b> ${esc(s[1])}</li>`).join("")}</ul>
-        <h2>결론</h2><p>모멘텀과 저변동을 섞은 첫 챔피언은 비용을 넣자 동일가중 매수보유를 못 이겼고, 표본외 우위는 장세 운이었습니다. 알파는 드물고, 남는 엣지는 낙폭 관리입니다.</p></div>
-    </div></div>`;
-  const cv = $("canvas", body), tip = $(".tip", body), chart = $(".chart", body);
+  const body = $(".body", w.el); body.classList.add("tdbody");
+  body.innerHTML = `<div class="td">
+    <div class="td-top">
+      <div class="td-logo"><i></i>trading-desk</div>
+      <div class="td-tabs"><button class="on" data-v="desk">데스크</button><button data-v="struct">구조</button><button data-v="valid">검증</button></div>
+      <div class="td-search"><input placeholder="종목 검색 ( / )" data-q></div>
+      <div class="td-grid"><button data-g="1">1</button><button class="on" data-g="4">4</button></div>
+      <div class="td-kv"><span>평가자산 <b>비공개</b></span><span>누적손익 <b>비공개</b></span><span>주문가능 <b>비공개</b></span></div>
+      <div class="td-status"><span class="pill warn">페이퍼 모드</span><span class="dot">데스크</span><span class="dot">뉴스</span><span class="dot">봇</span><span class="pill">조회 전용</span></div>
+    </div>
+    <div class="td-banner">실계좌와 연결하지 않은 화면입니다. 봉은 2026년 4월부터 7월까지의 공개 5분 시세를 묶은 것이고, 보유 종목과 손익은 표시하지 않습니다.</div>
+    <div class="td-view" data-view="desk">
+      <aside class="td-left"><div class="td-h">추천 종목 <small>재무 감사</small></div><div class="td-recs"></div></aside>
+      <main class="td-charts"></main>
+      <aside class="td-right"><div class="td-h">보유 종목 · 근거 <small class="live">페이퍼</small></div><div class="td-pos"></div><div class="td-h" style="margin-top:14px">리스크 게이트</div><div class="td-gates">${DESK.gates.map(g => `<div><span>${esc(g[0])}</span><b>${esc(g[1])}</b></div>`).join("")}</div></aside>
+    </div>
+    <div class="td-view" data-view="struct" hidden><div class="pane">
+      <h2>구조</h2><p class="flow">전략 → 신호 → 조정자 → 리스크 게이트 → 브로커 → 장부</p><p class="muted">전략은 주문을 직접 내지 않습니다. 모든 주문은 게이트를 지나고 장부에 남습니다. 데스크와 화면은 터미널 없이 상주하고, 재시작하면 장부에서 상태를 되살립니다.</p>
+      <div class="two"><div><h2>전략 4종</h2><ul>${DESK.strategies.map(s => `<li><b>${esc(s[0])}</b> ${esc(s[1])}</li>`).join("")}</ul></div>
+      <div><h2>층</h2><ul><li><b>시세</b> 5분 봉, 일봉, 장기 데이터</li><li><b>재무 감사</b> 저평가·우량·성장·모멘텀 점수, 부채 흐름</li><li><b>뉴스</b> 언어모델 판독, 검증 중 가설로 강등</li><li><b>장부</b> SQLite, 모든 주문과 거부 사유 기록</li></ul></div></div>
+      <h2>결론</h2><p>모멘텀과 저변동을 섞은 첫 챔피언은 비용을 넣자 동일가중 매수보유를 못 이겼고, 표본외 우위는 장세 운이었습니다. 알파는 드물고, 남는 엣지는 낙폭 관리입니다.</p></div></div>
+    <div class="td-view" data-view="valid" hidden><div class="pane desk">
+      <div class="stats">${DESK.tests.map(s => `<div class="stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("")}</div>
+      <h2>남은 엣지 하나: 변동성 목표로 낙폭 줄이기</h2>
+      <div class="ctl"><label>목표 변동성 <output data-o="tv">10%</output><input type="range" data-tv min="5" max="20" value="10"></label><label>실현변동성 창 <output data-o="lb">12주</output><input type="range" data-lb min="4" max="26" value="12"></label><span class="muted">SPY 주간 종가 1993년부터. 레버리지 상한 1, 비용 0.</span></div>
+      <div class="chart"><canvas></canvas><div class="tip" hidden></div><div class="legend"><span><i style="background:var(--s1)"></i>매수 후 보유</span><span><i style="background:var(--s2)"></i>변동성 목표</span></div></div>
+      <table class="tbl2"><thead><tr><th>구간</th><th>매수 후 보유 최대낙폭</th><th>변동성 목표 최대낙폭</th><th>차이</th></tr></thead><tbody data-crisis></tbody></table></div></div>
+    <div class="td-ticker"><div class="td-tk"></div></div>
+  </div>`;
+  /* 탭 */
+  const views = body.querySelectorAll(".td-view");
+  for (const b of body.querySelectorAll(".td-tabs button")) b.onclick = () => { for (const o of body.querySelectorAll(".td-tabs button")) o.classList.toggle("on", o === b); for (const v of views) v.hidden = v.dataset.view !== b.dataset.v; if (b.dataset.v === "valid") validation.draw(); else drawAll(); };
+  /* 추천 종목 */
+  fetch("desk_recs.json").then(r => r.json()).then(recs => {
+    $(".td-recs", body).innerHTML = recs.map((r, i) => `<div class="rec"><div class="rec-h"><span class="rk">${i + 1}</span><b>${esc(r.symbol)}</b><span class="nm">${esc(DESK_NAMES[r.symbol] || "")} · ${esc(r.sector || "")}</span><span class="sc">+${(+r.composite).toFixed(2)}</span></div><div class="rec-s">${esc(r.summary || "")}</div><div class="rec-t">${r.deleveraging ? '<span class="tg r">채권환원</span>' : ""}${r.net_cash ? '<span class="tg g">순현금</span>' : ""}</div></div>`).join("");
+  }).catch(() => {});
+  /* 차트 */
+  let CANDLES = null, grid = 4, filter = "";
+  const charts = $(".td-charts", body);
+  const symsAll = ["SPY", "NVDA", "AAPL", "TSLA"];
+  const state = {}; for (const s of symsAll) state[s] = { tf: "30" };
+  const sma = (a, n) => a.map((_, i) => i < n - 1 ? null : a.slice(i - n + 1, i + 1).reduce((x, y) => x + y, 0) / n);
+  function buildCards() {
+    const syms = symsAll.filter(s => !filter || s.includes(filter)).slice(0, grid);
+    charts.className = "td-charts g" + (syms.length === 1 ? 1 : 4);
+    charts.innerHTML = syms.map(s => `<section class="tdc" data-s="${s}"><div class="tdc-h"><b>${s}</b><span class="nm">${esc(DESK_NAMES[s] || "")}</span><span class="px"></span><span class="chg"></span></div><div class="tdc-l"><span class="ma5">MA5</span><span class="ma20">MA20</span><span class="bb">BB±2σ</span><span class="tfs">${["15", "30", "60"].map(t => `<button data-tf="${t}" class="${state[s].tf === t ? "on" : ""}">${t}분</button>`).join("")}</span></div><div class="tdc-c"><canvas></canvas><div class="tip" hidden></div></div></section>`).join("");
+    for (const sec of charts.querySelectorAll(".tdc")) for (const b of sec.querySelectorAll("[data-tf]")) b.onclick = () => { state[sec.dataset.s].tf = b.dataset.tf; for (const o of sec.querySelectorAll("[data-tf]")) o.classList.toggle("on", o === b); drawCard(sec); };
+    drawAll();
+  }
+  function drawAll() { if (!CANDLES) return; for (const sec of charts.querySelectorAll(".tdc")) drawCard(sec); }
+  function drawCard(sec) {
+    const s = sec.dataset.s, rows = CANDLES[s][state[s].tf]; if (!rows) return;
+    const cv = $("canvas", sec), box = $(".tdc-c", sec), tip = $(".tip", sec);
+    const W = box.clientWidth, H = box.clientHeight, dpr = devicePixelRatio || 1; if (W < 10 || H < 10) return;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
+    const c = cv.getContext("2d"); c.scale(dpr, dpr);
+    const cl = rows.map(r => r[4]), m5 = sma(cl, 5), m20 = sma(cl, 20);
+    const bb = cl.map((_, i) => { if (i < 19) return null; const s20 = cl.slice(i - 19, i + 1), m = m20[i]; const sd = Math.sqrt(s20.reduce((a, b) => a + (b - m) ** 2, 0) / 20); return [m + 2 * sd, m - 2 * sd]; });
+    const L = 8, R = 48, T = 10, B = 22, n = rows.length;
+    let lo = Math.min(...rows.map(r => r[3])), hi = Math.max(...rows.map(r => r[2]));
+    for (const b of bb) if (b) { lo = Math.min(lo, b[1]); hi = Math.max(hi, b[0]); }
+    const pad = (hi - lo) * 0.06; lo -= pad; hi += pad;
+    const X = (i) => L + (W - L - R) * (i + .5) / n, Y = (v) => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+    const cw = Math.max(2, (W - L - R) / n * 0.6);
+    c.clearRect(0, 0, W, H); c.font = "10px " + getComputedStyle(body).fontFamily; c.fillStyle = "#7d8590"; c.strokeStyle = "rgba(255,255,255,.07)"; c.lineWidth = 1;
+    const ticks = 5; for (let k = 0; k <= ticks; k++) { const v = lo + (hi - lo) * k / ticks; c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(W - R, Y(v)); c.stroke(); c.textAlign = "left"; c.fillText(v.toFixed(v > 100 ? 0 : 2), W - R + 6, Y(v) + 3); }
+    c.textAlign = "center"; const step = Math.ceil(n / 5); for (let i = 0; i < n; i += step) c.fillText(rows[i][0].slice(6), X(i), H - 7);
+    const line = (arr, col, wd = 1.4) => { c.beginPath(); c.strokeStyle = col; c.lineWidth = wd; let started = false; arr.forEach((v, i) => { if (v == null) return; started ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v)); started = true; }); c.stroke(); };
+    line(bb.map(b => b && b[0]), "rgba(255,255,255,.28)", 1); line(bb.map(b => b && b[1]), "rgba(255,255,255,.28)", 1);
+    rows.forEach((r, i) => { const up = r[4] >= r[1], col = up ? "#e5484d" : "#3b82f6"; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = 1; c.beginPath(); c.moveTo(X(i), Y(r[2])); c.lineTo(X(i), Y(r[3])); c.stroke(); const y1 = Y(Math.max(r[1], r[4])), y2 = Y(Math.min(r[1], r[4])); c.fillRect(X(i) - cw / 2, y1, cw, Math.max(1, y2 - y1)); });
+    line(m5, "#f5a524"); line(m20, "#2dd4bf");
+    const last = rows[n - 1][4], first = rows[0][1], chg = (last / first - 1) * 100;
+    $(".px", sec).textContent = "$" + last.toFixed(2); const ch = $(".chg", sec); ch.textContent = (chg >= 0 ? "▲ +" : "▼ ") + chg.toFixed(2) + "%"; ch.className = "chg " + (chg >= 0 ? "up" : "dn");
+    box.onpointermove = (e) => { const r = cv.getBoundingClientRect(), i = Math.floor((e.clientX - r.left - L) / (W - L - R) * n); if (i < 0 || i >= n) { tip.hidden = true; return; } const q = rows[i]; tip.hidden = false; tip.style.left = Math.min(e.clientX - r.left + 10, W - 150) + "px"; tip.innerHTML = `<b>${q[0]}</b>시 ${q[1]} 고 ${q[2]}<br>저 ${q[3]} 종 ${q[4]}`; };
+    box.onpointerleave = () => { tip.hidden = true; };
+  }
+  /* 신호(페이퍼 장부 근거) + 티커 */
+  function signals() {
+    const out = [];
+    for (const s of symsAll) { const cl = CANDLES[s]["60"].map(r => r[4]); const m5 = sma(cl, 5), m20 = sma(cl, 20), n = cl.length; const cross = m5[n - 1] > m20[n - 1] ? "정배열" : "역배열"; const g = [], l = []; for (let i = n - 2; i < n; i++) { const d = cl[i] - cl[i - 1]; (d > 0 ? g : l).push(Math.abs(d)); } const ag = g.reduce((a, b) => a + b, 0) / 2, al = l.reduce((a, b) => a + b, 0) / 2; const rsi = al === 0 ? 100 : 100 - 100 / (1 + ag / al); const mom = cl[n - 1] / cl[Math.max(0, n - 60)] - 1; out.push({ s, cross, rsi, mom }); }
+    return out;
+  }
+  function renderSignals() {
+    const sg = signals();
+    $(".td-pos", body).innerHTML = `<div class="td-note">실계좌 보유 종목은 표시하지 않습니다. 아래는 60분 봉으로 지금 계산한 전략 신호입니다.</div>` + sg.map(x => `<div class="pos"><b>${x.s}</b><span class="nm">${esc(DESK_NAMES[x.s] || "")}</span><div class="pos-r"><span>이동평균 <b class="${x.cross === "정배열" ? "up" : "dn"}">${x.cross}</b></span><span>RSI(2) <b>${x.rsi.toFixed(0)}</b></span><span>60봉 모멘텀 <b class="${x.mom >= 0 ? "up" : "dn"}">${(x.mom * 100).toFixed(1)}%</b></span></div><div class="pos-v">게이트 판정 <b>보류</b> · 거래 꺼짐</div></div>`).join("");
+    const tk = sg.map(x => `<span><b>${x.s}</b> ${x.cross}, RSI(2) ${x.rsi.toFixed(0)}, 60봉 ${(x.mom * 100).toFixed(1)}% <small>strategy</small></span>`).join("");
+    $(".td-tk", body).innerHTML = tk + tk;
+  }
+  fetch("desk_candles.json").then(r => r.json()).then(j => { CANDLES = j.symbols; buildCards(); renderSignals(); }).catch(() => { charts.innerHTML = '<p class="muted" style="padding:20px">시세 파일을 읽지 못했습니다.</p>'; });
+  for (const b of body.querySelectorAll("[data-g]")) b.onclick = () => { grid = +b.dataset.g; for (const o of body.querySelectorAll("[data-g]")) o.classList.toggle("on", o === b); buildCards(); };
+  $("[data-q]", body).oninput = (e) => { filter = e.target.value.trim().toUpperCase(); buildCards(); };
+  /* 검증 탭(변동성 목표) */
+  const validation = renderValidation($('[data-view="valid"]', body), w);
+  w.el.addEventListener("winresize", () => { drawAll(); validation.draw(); }); new ResizeObserver(() => drawAll()).observe(charts);
+}
+function renderValidation(host, w) {
+  const cv = $("canvas", host), tip = $(".tip", host), chart = $(".chart", host);
   let rows = null, series = null;
-  const cs = () => getComputedStyle(body);
-  fetch("spy_weekly.json").then(r => r.json()).then(j => { rows = j.rows; compute(); draw(); }).catch(() => { chart.innerHTML = '<p class="muted">시세 파일을 읽지 못했습니다.</p>'; });
+  fetch("spy_weekly.json").then(r => r.json()).then(j => { rows = j.rows; compute(); draw(); }).catch(() => {});
   function compute() {
-    const tv = +$("[data-tv]", body).value / 100, lb = +$("[data-lb]", body).value;
-    const px = rows.map(r => r[1]), n = px.length, bh = [1], vt = [1], wts = [1];
-    const rets = [0]; for (let i = 1; i < n; i++) rets.push(px[i] / px[i - 1] - 1);
-    for (let i = 1; i < n; i++) {
-      let wgt = 1;
-      if (i > lb) { const s = rets.slice(i - lb, i); const m = s.reduce((a, b) => a + b, 0) / lb; const v = Math.sqrt(s.reduce((a, b) => a + (b - m) ** 2, 0) / (lb - 1)) * Math.sqrt(52); wgt = Math.min(1, tv / Math.max(v, 1e-6)); }
-      bh.push(bh[i - 1] * (1 + rets[i])); vt.push(vt[i - 1] * (1 + wgt * rets[i])); wts.push(wgt);
-    }
+    const tv = +$("[data-tv]", host).value / 100, lb = +$("[data-lb]", host).value;
+    const px = rows.map(r => r[1]), n = px.length, bh = [1], vt = [1], wts = [1], rets = [0];
+    for (let i = 1; i < n; i++) rets.push(px[i] / px[i - 1] - 1);
+    for (let i = 1; i < n; i++) { let wgt = 1; if (i > lb) { const s = rets.slice(i - lb, i); const m = s.reduce((a, b) => a + b, 0) / lb; const v = Math.sqrt(s.reduce((a, b) => a + (b - m) ** 2, 0) / (lb - 1)) * Math.sqrt(52); wgt = Math.min(1, tv / Math.max(v, 1e-6)); } bh.push(bh[i - 1] * (1 + rets[i])); vt.push(vt[i - 1] * (1 + wgt * rets[i])); wts.push(wgt); }
     series = { bh, vt, wts };
     const mdd = (arr, a, b) => { let pk = arr[a], m = 0; for (let i = a; i <= b; i++) { pk = Math.max(pk, arr[i]); m = Math.min(m, arr[i] / pk - 1); } return m; };
     const idx = (d) => { let k = 0; while (k < n - 1 && rows[k][0] < d) k++; return k; };
     const pct = (x) => (x * 100).toFixed(1) + "%";
-    $("[data-crisis]", body).innerHTML = DESK.crises.map(c => { const a = idx(c[1]), b = idx(c[2]); const x = mdd(bh, a, b), y = mdd(vt, a, b); return `<tr><td>${esc(c[0])} <span class="muted">${c[1].slice(0, 4)}~${c[2].slice(0, 4)}</span></td><td>${pct(x)}</td><td>${pct(y)}</td><td>${(y - x) >= 0 ? "+" : ""}${pct(y - x)}</td></tr>`; }).join("")
-      + `<tr><td>전체 ${rows[0][0].slice(0, 4)}~${rows[n - 1][0].slice(0, 4)}</td><td>${pct(mdd(bh, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1) - mdd(bh, 0, n - 1))}</td></tr>`;
+    $("[data-crisis]", host).innerHTML = DESK.crises.map(c => { const a = idx(c[1]), b = idx(c[2]); const x = mdd(bh, a, b), y = mdd(vt, a, b); return `<tr><td>${esc(c[0])} <span class="muted">${c[1].slice(0, 4)}~${c[2].slice(0, 4)}</span></td><td>${pct(x)}</td><td>${pct(y)}</td><td>${(y - x) >= 0 ? "+" : ""}${pct(y - x)}</td></tr>`; }).join("") + `<tr><td>전체 ${rows[0][0].slice(0, 4)}~${rows[n - 1][0].slice(0, 4)}</td><td>${pct(mdd(bh, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1))}</td><td>${pct(mdd(vt, 0, n - 1) - mdd(bh, 0, n - 1))}</td></tr>`;
   }
   function draw() {
-    if (!series) return;
-    const dpr = devicePixelRatio || 1, W = chart.clientWidth, H = 300;
+    if (!series || host.hidden) return;
+    const dpr = devicePixelRatio || 1, W = chart.clientWidth, H = 280; if (W < 10) return;
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
     const c = cv.getContext("2d"); c.scale(dpr, dpr);
-    const st = cs(), s1 = st.getPropertyValue("--s1").trim(), s2 = st.getPropertyValue("--s2").trim(), ink = st.getPropertyValue("--win-muted").trim(), grid = st.getPropertyValue("--line").trim();
+    const st = getComputedStyle(host), s1 = st.getPropertyValue("--s1").trim(), s2 = st.getPropertyValue("--s2").trim(), ink = "#7d8590", grid = "rgba(255,255,255,.08)";
     const L = 44, R = 70, T = 12, B = 26, n = rows.length;
     const ymax = Math.max(...series.bh, ...series.vt), lmax = Math.log10(ymax * 1.15);
     const X = (i) => L + (W - L - R) * i / (n - 1), Y = (v) => T + (H - T - B) * (1 - Math.log10(v) / lmax);
     c.clearRect(0, 0, W, H); c.font = "11px " + st.fontFamily; c.fillStyle = ink; c.strokeStyle = grid; c.lineWidth = 1;
     for (const t of [1, 2, 5, 10, 20, 50]) { if (t > ymax * 1.15) break; c.beginPath(); c.moveTo(L, Y(t)); c.lineTo(W - R, Y(t)); c.stroke(); c.textAlign = "right"; c.fillText(t + "배", L - 6, Y(t) + 4); }
-    c.textAlign = "center"; for (let y = 1995; y <= 2030; y += 5) { const k = rows.findIndex(r => r[0] >= y + "-01-01"); if (k > 0) { c.fillText(String(y), X(k), H - 8); } }
-    const line = (arr, col) => { c.beginPath(); c.strokeStyle = col; c.lineWidth = 2; c.lineJoin = "round"; arr.forEach((v, i) => i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v))); c.stroke(); c.textAlign = "left"; c.fillStyle = st.getPropertyValue("--win-fg").trim(); c.fillText(arr[n - 1].toFixed(1) + "배", W - R + 6, Y(arr[n - 1]) + 4); };
+    c.textAlign = "center"; for (let y = 1995; y <= 2030; y += 5) { const k = rows.findIndex(r => r[0] >= y + "-01-01"); if (k > 0) c.fillText(String(y), X(k), H - 8); }
+    const line = (arr, col) => { c.beginPath(); c.strokeStyle = col; c.lineWidth = 2; c.lineJoin = "round"; arr.forEach((v, i) => i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v))); c.stroke(); c.textAlign = "left"; c.fillStyle = "#e6edf3"; c.fillText(arr[n - 1].toFixed(1) + "배", W - R + 6, Y(arr[n - 1]) + 4); };
     line(series.bh, s1); line(series.vt, s2);
-    chart.onpointermove = (e) => {
-      const r = cv.getBoundingClientRect(), i = Math.round((e.clientX - r.left - L) / (W - L - R) * (n - 1));
-      if (i < 0 || i >= n) { tip.hidden = true; return; }
-      tip.hidden = false; tip.style.left = Math.min(X(i) + 12, W - 190) + "px"; tip.style.top = "8px";
-      tip.innerHTML = `<b>${rows[i][0]}</b><div><i style="background:${s1}"></i>매수 후 보유 ${series.bh[i].toFixed(2)}배</div><div><i style="background:${s2}"></i>변동성 목표 ${series.vt[i].toFixed(2)}배 <span class="muted">비중 ${(series.wts[i] * 100).toFixed(0)}%</span></div>`;
-      draw(); c.strokeStyle = ink; c.lineWidth = 1; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(X(i), T); c.lineTo(X(i), H - B); c.stroke(); c.setLineDash([]);
-      for (const [arr, col] of [[series.bh, s1], [series.vt, s2]]) { c.beginPath(); c.arc(X(i), Y(arr[i]), 4, 0, 7); c.fillStyle = col; c.fill(); c.strokeStyle = st.getPropertyValue("--win-bg").trim(); c.lineWidth = 2; c.stroke(); }
-    };
+    chart.onpointermove = (e) => { const r = cv.getBoundingClientRect(), i = Math.round((e.clientX - r.left - L) / (W - L - R) * (n - 1)); if (i < 0 || i >= n) { tip.hidden = true; return; } tip.hidden = false; tip.style.left = Math.min(X(i) + 12, W - 190) + "px"; tip.style.top = "8px"; tip.innerHTML = `<b>${rows[i][0]}</b><div><i style="background:${s1}"></i>매수 후 보유 ${series.bh[i].toFixed(2)}배</div><div><i style="background:${s2}"></i>변동성 목표 ${series.vt[i].toFixed(2)}배 <span class="muted">비중 ${(series.wts[i] * 100).toFixed(0)}%</span></div>`; draw(); c.strokeStyle = ink; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(X(i), T); c.lineTo(X(i), H - B); c.stroke(); c.setLineDash([]); for (const [arr, col] of [[series.bh, s1], [series.vt, s2]]) { c.beginPath(); c.arc(X(i), Y(arr[i]), 4, 0, 7); c.fillStyle = col; c.fill(); c.strokeStyle = "#1a1d24"; c.lineWidth = 2; c.stroke(); } };
     chart.onpointerleave = () => { tip.hidden = true; draw(); };
   }
-  for (const inp of body.querySelectorAll("input[type=range]")) inp.oninput = () => { $("[data-o=tv]", body).textContent = $("[data-tv]", body).value + "%"; $("[data-o=lb]", body).textContent = $("[data-lb]", body).value + "주"; if (rows) { compute(); draw(); } };
-  w.el.addEventListener("winresize", draw); document.addEventListener("themechange", draw); new ResizeObserver(draw).observe(chart);
+  for (const inp of host.querySelectorAll("input[type=range]")) inp.oninput = () => { $("[data-o=tv]", host).textContent = $("[data-tv]", host).value + "%"; $("[data-o=lb]", host).textContent = $("[data-lb]", host).value + "주"; if (rows) { compute(); draw(); } };
+  return { draw };
 }
 
 /* ---------- 터미널 ---------- */
