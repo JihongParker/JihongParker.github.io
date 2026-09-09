@@ -5,7 +5,7 @@ const el = (h) => { const t = document.createElement("template"); t.innerHTML = 
 const isMobile = () => matchMedia("(max-width:720px)").matches;
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ext = (u) => window.open(u, "_blank", "noopener");
-const PDF_BASE = "https://cdn.jsdelivr.net/gh/JihongParker/JihongParker.github.io@main/papers/"; /* Pages 보다 전송 속도가 빠른 CDN. 갱신 후 purge.jsdelivr.net 호출 */
+const IMG_BASE = "https://cdn.jsdelivr.net/gh/JihongParker/JihongParker.github.io@main/pages/"; /* 논문 페이지 이미지. Pages 보다 전송이 빠른 CDN. 갱신 후 purge.jsdelivr.net 호출 */
 
 /* ---------- theme ---------- */
 const root = document.documentElement;
@@ -266,20 +266,25 @@ function renderSafari(w, pid) {
   w.onArg = show; show(pid);
 }
 
-/* ---------- 미리보기 (논문 PDF) ---------- */
+/* ---------- 미리보기 (논문, 페이지 이미지) ---------- */
+let PAGE_INDEX = null;
+const pageIndex = () => PAGE_INDEX || (PAGE_INDEX = fetch("pages/index.json").then(r => r.json()).catch(() => ({})));
 function renderPreview(w, n) {
   const body = $(".body", w.el);
   const pb = (p) => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`;
   body.innerHTML = `<div class="side pv-side"><h6>대표작 <span class="wp">working papers · 심사 전</span></h6>${PAPERS.filter(p => p.lead).map(pb).join("")}<h6>후속 노트</h6>${PAPERS.filter(p => !p.lead).map(pb).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
-    <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><a class="btn" data-open target="_blank" rel="noopener">새 탭에서 열기</a></div><iframe title="pdf"></iframe></div>`;
-  const fr = $("iframe", body), hd = $(".pv-hd", body);
-  const show = (num) => {
-    const p = PAPERS.find(x => x.n === num) || PAPERS.find(x => x.lead);
+    <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><div class="pv-act"><span class="pv-pg muted"></span><a class="btn" data-open target="_blank" rel="noopener">PDF 내려받기</a></div></div><div class="pv-pages"></div></div>`;
+  const hd = $(".pv-hd", body), pages = $(".pv-pages", body), pg = $(".pv-pg", body);
+  let cur = null;
+  const show = async (num) => {
+    const p = PAPERS.find(x => x.n === num) || PAPERS.find(x => x.lead); cur = p;
     for (const b of body.querySelectorAll(".side button")) b.classList.toggle("on", b.dataset.n === p.n);
-    const src = PDF_BASE + p.file;
-    if (!fr.src.startsWith(src)) fr.src = src + "#view=FitH";
-    $("b", hd).textContent = p.n + "  " + p.kr; $("p", hd).textContent = p.p; $("[data-open]", hd).href = src;
+    $("b", hd).textContent = p.n + "  " + p.kr; $("p", hd).textContent = p.p; $("[data-open]", hd).href = "papers/" + p.file;
     $(".title", w.el).textContent = p.file + " — 미리보기";
+    const name = p.file.replace(/\.pdf$/, ""), idx = (await pageIndex())[name] || { pages: 1, w: 1000, h: 1414, fmt: "webp" };
+    if (cur !== p) return;
+    pg.textContent = idx.pages + "쪽"; pages.scrollTop = 0;
+    pages.innerHTML = Array.from({ length: idx.pages }, (_, k) => `<img src="${IMG_BASE}${name}/p${String(k + 1).padStart(3, "0")}.${idx.fmt}" width="${idx.w}" height="${idx.h}" alt="${esc(p.kr)} ${k + 1}쪽" ${k < 2 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`).join("");
   };
   for (const b of body.querySelectorAll(".side button")) b.onclick = () => show(b.dataset.n);
   w.onArg = show; show(n);
@@ -469,6 +474,6 @@ setTimeout(() => {
   else if (hash && APPS[hash]) open(hash);
   else open("about");
 }, seen ? 250 : 1350);
-if (!isMobile()) setTimeout(() => { for (const p of PAPERS.filter(x => x.lead)) { const l = document.createElement("link"); l.rel = "prefetch"; l.as = "fetch"; l.href = PDF_BASE + p.file; document.head.appendChild(l); } }, 4000);
+if (!isMobile()) setTimeout(() => { pageIndex(); for (const p of PAPERS.filter(x => x.lead)) { const l = document.createElement("link"); l.rel = "prefetch"; l.as = "image"; l.href = IMG_BASE + p.file.replace(/\.pdf$/, "") + "/p001.webp"; document.head.appendChild(l); } }, 4000);
 window.addEventListener("resize", () => { for (const w of wins.values()) if (w.el.classList.contains("max")) { Object.assign(w.el.style, { width: innerWidth + "px", height: (innerHeight - 28 - 84) + "px" }); w.el.dispatchEvent(new Event("winresize")); } });
 })();
