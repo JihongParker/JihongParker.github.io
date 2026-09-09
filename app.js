@@ -272,7 +272,7 @@ const pageIndex = () => PAGE_INDEX || (PAGE_INDEX = fetch("pages/index.json").th
 function renderPreview(w, n) {
   const body = $(".body", w.el);
   const pb = (p) => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`;
-  body.innerHTML = `<div class="side pv-side"><h6>대표작 <span class="wp">working papers · 심사 전</span></h6>${PAPERS.filter(p => p.lead).map(pb).join("")}<h6>후속 노트</h6>${PAPERS.filter(p => !p.lead).map(pb).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
+  body.innerHTML = `<div class="side pv-side"><h6>핵심</h6>${PAPERS.filter(p => p.lead).map(pb).join("")}<h6>후속 노트</h6>${PAPERS.filter(p => !p.lead).map(pb).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
     <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><div class="pv-act"><span class="pv-pg muted"></span><a class="btn" data-open target="_blank" rel="noopener">PDF 내려받기</a></div></div><div class="pv-pages"></div></div>`;
   const hd = $(".pv-hd", body), pages = $(".pv-pages", body), pg = $(".pv-pg", body);
   let cur = null;
