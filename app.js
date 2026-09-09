@@ -284,7 +284,13 @@ function renderPreview(w, n) {
     const name = p.file.replace(/\.pdf$/, ""), idx = (await pageIndex())[name] || { pages: 1, w: 1000, h: 1414, fmt: "webp" };
     if (cur !== p) return;
     pg.textContent = idx.pages + "쪽"; pages.scrollTop = 0;
-    pages.innerHTML = Array.from({ length: idx.pages }, (_, k) => `<img src="${IMG_BASE}${name}/p${String(k + 1).padStart(3, "0")}.${idx.fmt}" width="${idx.w}" height="${idx.h}" alt="${esc(p.kr)} ${k + 1}쪽" ${k < 2 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`).join("");
+    const url = (k) => `${IMG_BASE}${name}/p${String(k + 1).padStart(3, "0")}.${idx.fmt}`;
+    pages.innerHTML = Array.from({ length: idx.pages }, (_, k) => `<img ${k < 2 ? `src="${url(k)}" fetchpriority="high"` : `data-src="${url(k)}"`} width="${idx.w}" height="${idx.h}" alt="${esc(p.kr)} ${k + 1}쪽" decoding="async">`).join("");
+    /* 나머지 쪽은 순서대로 미리 받아 둔다(동시 3장). 폰은 데이터 절약을 위해 보이는 근처만 */
+    const rest = [...pages.querySelectorAll("img[data-src]")];
+    if (isMobile()) { const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) { e.target.src = e.target.dataset.src; io.unobserve(e.target); } }, { root: pages, rootMargin: "1600px 0px" }); rest.forEach(im => io.observe(im)); return; }
+    let active = 0; const pump = () => { while (active < 3 && rest.length) { const im = rest.shift(); if (cur !== p) return; active++; im.onload = im.onerror = () => { active--; pump(); }; im.src = im.dataset.src; } };
+    pump();
   };
   for (const b of body.querySelectorAll(".side button")) b.onclick = () => show(b.dataset.n);
   w.onArg = show; show(n);
