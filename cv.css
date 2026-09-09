@@ -20,3 +20,6 @@ footer{max-width:720px;margin:0 auto;padding:20px;color:var(--mute);font-size:13
 .with-photo{display:flex;gap:22px;align-items:center}.photo{width:120px;height:120px;border-radius:24px;object-fit:cover;flex:none}
 @media (max-width:520px){.with-photo{flex-direction:column;align-items:flex-start}}
 @media print{.photo{width:90px;height:90px;border-radius:12px}}
+
+h3{font-size:13px;color:var(--mute);margin:14px 0 8px;font-weight:600}
+.papers.notes li{margin-bottom:8px}.papers.notes p{font-size:14px}

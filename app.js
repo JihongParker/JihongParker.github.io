@@ -222,7 +222,7 @@ function renderFinder(w) {
   const body = $(".body", w.el);
   const groups = {
     "포트폴리오": PROJECTS.map(p => ({ label: p.name, icon: ICONS[p.icon], run: () => launch(p) })),
-    "논문": PAPERS.map(p => ({ label: `${p.n}_${p.kr}.pdf`, icon: ICONS.pdf, run: () => open("preview", p.n) })),
+    "논문": [...PAPERS.filter(p => p.lead), ...PAPERS.filter(p => !p.lead)].map(p => ({ label: `${p.n}_${p.kr}.pdf`, icon: ICONS.pdf, run: () => open("preview", p.n) })),
     "경력": [{ label: "경력.md", icon: ICONS.timeline, run: () => open("timeline") }],
     "메모": NOTES.map((n, i) => ({ label: n.t + ".txt", icon: ICONS.doc("TXT"), run: () => open("notes", i) })),
     "연락": [{ label: "메일", icon: ICONS.mail, run: () => open("mail") }, { label: "GitHub", icon: ICONS.github, run: () => ext(PERSON.github) }],
@@ -268,11 +268,12 @@ function renderSafari(w, pid) {
 /* ---------- 미리보기 (논문 PDF) ---------- */
 function renderPreview(w, n) {
   const body = $(".body", w.el);
-  body.innerHTML = `<div class="side pv-side"><h6>작업 논문 6편 <span class="wp">working papers · 심사 전</span></h6>${PAPERS.map(p => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
+  const pb = (p) => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`;
+  body.innerHTML = `<div class="side pv-side"><h6>대표작 <span class="wp">working papers · 심사 전</span></h6>${PAPERS.filter(p => p.lead).map(pb).join("")}<h6>후속 노트</h6>${PAPERS.filter(p => !p.lead).map(pb).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
     <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><a class="btn" data-open target="_blank" rel="noopener">새 탭에서 열기</a></div><iframe title="pdf"></iframe></div>`;
   const fr = $("iframe", body), hd = $(".pv-hd", body);
   const show = (num) => {
-    const p = PAPERS.find(x => x.n === num) || PAPERS[0];
+    const p = PAPERS.find(x => x.n === num) || PAPERS.find(x => x.lead);
     for (const b of body.querySelectorAll(".side button")) b.classList.toggle("on", b.dataset.n === p.n);
     const src = "papers/" + p.file;
     if (!fr.src.endsWith(src)) fr.src = src + "#view=FitH";
