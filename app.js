@@ -456,7 +456,7 @@ function renderAbout(w) {
       <tr><td>만든 것</td><td>논문 6편 · 웹앱 3개 · 트레이딩 데스크 1개</td></tr>
       <tr><td>도구</td><td>${PERSON.tools.map(esc).join(" · ")}</td></tr>
     </table>
-    <div class="btns"><button class="btn" data-o="notes">자세히</button><button class="btn" data-o="mail">연락</button></div></div></div></div>`;
+    <div class="btns"><a class="btn pri" href="cv.html">논문과 이력 한 장으로 보기</a><a class="btn" href="cv-en.html">English</a><button class="btn" data-o="mail">연락</button></div></div></div></div>`;
   for (const b of body.querySelectorAll("[data-o]")) b.onclick = () => open(b.dataset.o);
 }
 
