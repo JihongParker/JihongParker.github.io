@@ -5,6 +5,7 @@ const el = (h) => { const t = document.createElement("template"); t.innerHTML = 
 const isMobile = () => matchMedia("(max-width:720px)").matches;
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ext = (u) => window.open(u, "_blank", "noopener");
+const PDF_BASE = "https://cdn.jsdelivr.net/gh/JihongParker/JihongParker.github.io@main/papers/"; /* Pages 보다 전송 속도가 빠른 CDN. 갱신 후 purge.jsdelivr.net 호출 */
 
 /* ---------- theme ---------- */
 const root = document.documentElement;
@@ -275,8 +276,8 @@ function renderPreview(w, n) {
   const show = (num) => {
     const p = PAPERS.find(x => x.n === num) || PAPERS.find(x => x.lead);
     for (const b of body.querySelectorAll(".side button")) b.classList.toggle("on", b.dataset.n === p.n);
-    const src = "papers/" + p.file;
-    if (!fr.src.endsWith(src)) fr.src = src + "#view=FitH";
+    const src = PDF_BASE + p.file;
+    if (!fr.src.startsWith(src)) fr.src = src + "#view=FitH";
     $("b", hd).textContent = p.n + "  " + p.kr; $("p", hd).textContent = p.p; $("[data-open]", hd).href = src;
     $(".title", w.el).textContent = p.file + " — 미리보기";
   };
@@ -468,5 +469,6 @@ setTimeout(() => {
   else if (hash && APPS[hash]) open(hash);
   else open("about");
 }, seen ? 250 : 1350);
+if (!isMobile()) setTimeout(() => { for (const p of PAPERS.filter(x => x.lead)) { const l = document.createElement("link"); l.rel = "prefetch"; l.as = "fetch"; l.href = PDF_BASE + p.file; document.head.appendChild(l); } }, 4000);
 window.addEventListener("resize", () => { for (const w of wins.values()) if (w.el.classList.contains("max")) { Object.assign(w.el.style, { width: innerWidth + "px", height: (innerHeight - 28 - 84) + "px" }); w.el.dispatchEvent(new Event("winresize")); } });
 })();
