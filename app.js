@@ -25,13 +25,6 @@ sysDark.addEventListener("change", applyTheme);
 $("#theme-btn").onclick = () => { theme = isDark() ? "light" : "dark"; try { localStorage.setItem("theme", theme); } catch {} applyTheme(); };
 applyTheme();
 
-/* ---------- wallpaper (미리 생성한 그림, 시간대별) ---------- */
-(function wallpaper() {
-  const h = new Date().getHours(), slot = h < 7 ? "night" : h < 10 ? "dawn" : h < 17 ? "day" : h < 20 ? "dusk" : "night";
-  const im = new Image(); im.onload = () => { const d = $("#desktop"); d.style.setProperty("--wall", `url(img/wall/${slot}.webp)`); d.classList.add("has-wall"); };
-  im.src = `img/wall/${slot}.webp`;
-})();
-
 /* ---------- clock ---------- */
 const clock = $("#clock");
 const fmtD = new Intl.DateTimeFormat("ko-KR", { month: "short", day: "numeric", weekday: "short" });
@@ -278,7 +271,7 @@ let PAGE_INDEX = null;
 const pageIndex = () => PAGE_INDEX || (PAGE_INDEX = fetch("pages/index.json").then(r => r.json()).catch(() => ({})));
 function renderPreview(w, n) {
   const body = $(".body", w.el);
-  const pb = (p) => `<button data-n="${p.n}"><img class="cv" src="img/covers/${p.n}.webp" alt="" onerror="this.remove()"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`;
+  const pb = (p) => `<button data-n="${p.n}"><span class="pn">${p.n}</span><span>${esc(p.kr)}</span></button>`;
   body.innerHTML = `<div class="side pv-side"><h6>핵심</h6>${PAPERS.filter(p => p.lead).map(pb).join("")}<h6>후속 노트</h6>${PAPERS.filter(p => !p.lead).map(pb).join("")}<hr><a class="side-link" href="${PERSON.ssrn}" target="_blank" rel="noopener">SSRN 저자 페이지</a><a class="side-link" href="https://github.com/JihongParker/wti-fx-hedge-program" target="_blank" rel="noopener">코드와 원고</a><a class="side-link" href="cv.html">읽기 모드</a><a class="side-link" href="cv/jihong-park-cv-ko.pdf" target="_blank" rel="noopener">이력서 PDF</a></div>
     <div class="pv"><div class="pv-hd"><div><b></b><p></p></div><div class="pv-act"><span class="pv-pg muted"></span><a class="btn" data-open target="_blank" rel="noopener">PDF 내려받기</a></div></div><div class="pv-pages"></div></div>`;
   const hd = $(".pv-hd", body), pages = $(".pv-pages", body), pg = $(".pv-pg", body);
