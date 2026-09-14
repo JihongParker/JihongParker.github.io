@@ -1,0 +1,17 @@
+{
+  "style": "minimal abstract, muted navy and slate palette with one warm accent, soft film grain, no text, no people, no logos, wide composition, high detail, calm",
+  "model": "grok-2-image-1212",
+  "size": "1792x1024",
+  "images": [
+    { "file": "wall/dawn.webp",  "prompt": "dawn over a quiet harbour city, thin fog, pale amber light on water, distant refinery silhouettes" },
+    { "file": "wall/day.webp",   "prompt": "clear midday sky over a calm sea, faint horizon haze, very light blue gradient, almost empty" },
+    { "file": "wall/dusk.webp",  "prompt": "dusk over a harbour city, deep blue sky, first lights on cranes and tanks, warm orange edge on the horizon" },
+    { "file": "wall/night.webp", "prompt": "night over a harbour, near-black navy sky, scattered lights reflected on still water" },
+    { "file": "covers/01.webp",  "prompt": "twelve thin vertical bars of different heights fading into fog, an abstraction of a maturity-matched option strip" },
+    { "file": "covers/02.webp",  "prompt": "two translucent barrier planes with a thin path threading between them, abstraction of a double knock-out" },
+    { "file": "covers/03.webp",  "prompt": "one ledger line splitting into two parallel lines and rejoining, abstraction of combined versus split designation" },
+    { "file": "covers/04.webp",  "prompt": "a dense grid of tiny dots with a faint step change halfway, abstraction of a panel study of mandated disclosure" },
+    { "file": "covers/05.webp",  "prompt": "a calm line that suddenly breaks through a threshold and falls, abstraction of a knock-in event" },
+    { "file": "covers/06.webp",  "prompt": "two mirrored gates, one open and benign, one closed and harsh, abstraction of two barrier contracts" }
+  ]
+}
