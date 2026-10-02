@@ -39,7 +39,7 @@ window.PROJECTS = [
     links: [["SSRN", "https://ssrn.com/author=12066228"], ["코드와 원고", "https://github.com/JihongParker/wti-fx-hedge-program"]],
   },
   {
-    id: "erp", name: "HongERP", sub: "ESG 의사결정층 ERP", icon: "erp", kind: "웹앱", live: "https://jihongparker.github.io/hong-erp/",
+    id: "erp", name: "HongERP", sub: "ESG 의사결정층 ERP", icon: "erp", kind: "웹앱", live: "https://jihongparker.github.io/hong-erp/?lang=ko",
     one: "ESG 소프트웨어들이 비워 둔 결정 층을 채운 시제품입니다. 노출을 넣으면 얼마나 헤지하고 얼마나 공시할지를 한 번에 계산합니다.",
     look: ["개요 화면의 인과 흐름: 중대성에서 공시, 예산, 데스크, 회계로", "예산 화면 아래 생존 헤어컷 패널: 낙아웃이 사라질 확률에 따라 장부가 바닐라로 넘어가는 지점", "역할별 권한, 결재 대기열, 감사 추적, 회계연도 마감까지 갖춘 셸"],
     links: [["저장소", "https://github.com/JihongParker/hong-erp"]],
